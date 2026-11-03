@@ -5,6 +5,13 @@ import type { ClientStateSyncRequest, ClientStateSyncResult } from '../shared/cl
 
 import type { ReviewCard, ReviewDraft, ReviewRating } from '../shared/types'
 const api = {
+  desktopWallpaperStatus: ():Promise<import('../shared/desktopWallpaper').DesktopWallpaperStatus> => ipcRenderer.invoke('desktop-wallpaper:status'),
+  desktopWallpaperSetEnabled: (enabled:boolean):Promise<import('../shared/desktopWallpaper').DesktopWallpaperStatus> => ipcRenderer.invoke('desktop-wallpaper:enable',enabled),
+  onDesktopWallpaperStatus: (callback:(status:import('../shared/desktopWallpaper').DesktopWallpaperStatus)=>void) => {
+    const listener=(_event:Electron.IpcRendererEvent,status:import('../shared/desktopWallpaper').DesktopWallpaperStatus)=>callback(status)
+    ipcRenderer.on('desktop-wallpaper:status-changed',listener)
+    return()=>ipcRenderer.removeListener('desktop-wallpaper:status-changed',listener)
+  },
   learningCategoriesList:():Promise<import('../shared/learningCategories').LearningCategory[]>=>ipcRenderer.invoke('categories:list'),
   learningCategorySave:(input:import('../shared/learningCategories').LearningCategoryInput):Promise<import('../shared/learningCategories').LearningCategory>=>ipcRenderer.invoke('categories:save',input),
   learningCategoriesReorder:(ids:string[]):Promise<void>=>ipcRenderer.invoke('categories:reorder',ids),
@@ -141,7 +148,10 @@ const api = {
 
 contextBridge.exposeInMainWorld('api', api)
 
-export type XinhaiApi = Omit<typeof api, 'clientStateSync'> & {
+export type XinhaiApi = Omit<typeof api, 'clientStateSync'|'desktopWallpaperStatus'|'desktopWallpaperSetEnabled'|'onDesktopWallpaperStatus'> & {
+  desktopWallpaperStatus?: typeof api.desktopWallpaperStatus
+  desktopWallpaperSetEnabled?: typeof api.desktopWallpaperSetEnabled
+  onDesktopWallpaperStatus?: typeof api.onDesktopWallpaperStatus
   clientStateSync?: (request:ClientStateSyncRequest)=>Record<string,string>|null
 }
 

@@ -43,6 +43,7 @@ import { themeTextPalette, TEXT_SURFACE_ALPHA } from '../../shared/themeContrast
 import { extractWallpaperColors } from './lib/wallpaperColors'
 import './styles/commercial-contrast.css'
 import {useHomeViewport} from './lib/useHomeViewport'
+import {personalAsset, personalMedia} from '../../shared/personalMedia'
 
 const PAGES = {
   knowledge: Knowledge,
@@ -142,6 +143,7 @@ export default function App() {
 
   return (
     <MotionConfig reducedMotion={reduce ? 'always' : 'user'}><div className={'study-shell' + (reduce ? ' reduce-motion' : '') + (uiHidden ? ' ui-hidden' : '')} data-page={page} data-clock={settings.clockStyle} data-player={settings.playerStyle} data-scene={resolveScene(background,page,pageBackgrounds&&!uiHidden,settings.customBackground).id} style={{ height: '100%', position: 'relative', '--theme-color':themeColor,'--cyan':`color-mix(in srgb, ${themeColor} 70%, white)`,'--cyan-bright':themeColor,'--cyan-dim':`color-mix(in srgb, ${themeColor} 35%, transparent)`,'--background-fit':settings.backgroundFit, '--panel-alpha':settings.panelOpacity, '--panel-blur':settings.panelBlur+'px', '--wallpaper-dim':settings.wallpaperDim, '--character-opacity':settings.characterOpacity, '--character-scale':settings.characterScale } as CSSProperties}>
+      {personalMedia.available && <link rel="stylesheet" href={personalAsset('appearance.css')}/>}
       <ThemePalette color={themeColor}/>
       <AutoSceneRotation wallpaper={uiHidden}/>
       <LanSyncUpdates/>

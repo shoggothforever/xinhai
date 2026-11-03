@@ -1,5 +1,6 @@
 import {createLanSyncServer} from './lanSyncServer'
 import { createFocusReminder } from './focusReminder'
+import { DesktopWallpaper } from './desktopWallpaper'
 import {neteaseLogin,neteaseLogout,neteaseRequest,neteaseResolve,neteaseShareResolve} from './netease'
 import {cloudId} from '../shared/netease'
 import { PERSONAL_EDITION, COMMERCIAL_EDITION, ONLINE_MUSIC_ENABLED } from '../shared/edition'
@@ -73,18 +74,22 @@ import { startSnapshotServer } from './snapshot'
 import type { DimensionId, GrowthSource, Settings } from '../shared/types'
 
 let mainWindow: BrowserWindow | null = null
+let desktopWallpaper: DesktopWallpaper | null = null
+let quitting = false
 const rendererFile = join(__dirname, '../renderer/index.html')
 const rendererDevUrl = !app.isPackaged ? process.env.ELECTRON_RENDERER_URL : undefined
 const rendererUrl = rendererDevUrl || pathToFileURL(rendererFile).href
 let backup:ReturnType<typeof createBackupController>|undefined
 let erasureScheduled=false
 let activeOperations=0
-const baseIpc = trustedIpc(() => mainWindow, COMMERCIAL_EDITION, rendererUrl)
+const baseIpc = trustedIpc(() => mainWindow, true, rendererUrl)
 const applicationIpc:typeof baseIpc={...baseIpc,handle(channel,listener){baseIpc.handle(channel,(event,...args)=>{
   if(erasureScheduled)throw Error('已确认清理，正在关闭应用；清理将在重新启动时完成')
   if(backup?.isRestoring&&!channel.startsWith('backup:'))throw Error('正在恢复资料，请等待完成后再操作')
   const result=listener(event,...args)
-  if(result&&typeof result.then==='function'){activeOperations++;return Promise.resolve(result).finally(()=>{activeOperations--})}
+  const appearanceChanged=()=>{if(/^(settings:update|background:|theme:|backup:restore)/.test(channel))desktopWallpaper?.syncSettings()}
+  if(result&&typeof result.then==='function'){activeOperations++;return Promise.resolve(result).then(value=>{appearanceChanged();return value}).finally(()=>{activeOperations--})}
+  appearanceChanged()
   return result
 })}}
 const profileRoot = app.commandLine.getSwitchValue('xinhai-profile-root')
@@ -125,6 +130,10 @@ function createWindow(): void {
   })
 
   mainWindow.on('ready-to-show', () => { if (!(profileRoot && app.commandLine.hasSwitch('xinhai-start-hidden'))) mainWindow?.show() })
+  mainWindow.on('close', event => {
+    if (!quitting && desktopWallpaper?.isEnabled()) { event.preventDefault(); mainWindow?.hide() }
+  })
+  mainWindow.on('closed', () => { mainWindow = null })
 
   if (COMMERCIAL_EDITION) protectMainWindow(mainWindow, rendererUrl)
   else mainWindow.webContents.setWindowOpenHandler((details) => {
@@ -166,7 +175,7 @@ else app.whenReady().then(async () => {
   applicationIpc.handle('model:status',()=>model.status())
   applicationIpc.handle('model:save',(_e,input)=>model.save(input))
   applicationIpc.handle('model:clear',()=>model.clear())
-  const changed=()=>mainWindow?.webContents.send('sync:changed')
+  const changed=()=>{mainWindow?.webContents.send('sync:changed');desktopWallpaper?.syncSettings()}
   let lanSync=createLanSyncServer(syncEngine,changed)
   const erasure=createErasureRequest(app.getPath('userData'),()=>getState().settings.knowledgePath||join(app.getPath('documents'),'心海学习库-源码版'))
   applicationIpc.handle('privacy:prepare',()=>{if(!COMMERCIAL_EDITION)throw Error('此操作仅用于独立商业版');if(backup?.isBusy)throw Error('请先完成当前备份操作');return erasure.prepare()})
@@ -371,6 +380,15 @@ else app.whenReady().then(async () => {
   applicationIpc.on('win:close', () => mainWindow?.close())
 
   createWindow()
+  desktopWallpaper = new DesktopWallpaper({
+    readSettings: () => getState().settings,
+    showMain: () => { if (!mainWindow || mainWindow.isDestroyed()) createWindow(); if (mainWindow?.isMinimized()) mainWindow.restore(); mainWindow?.show(); mainWindow?.focus() },
+    icon: join(__dirname, '../renderer/design/app-icon.png'),
+    devUrl: rendererDevUrl,
+    onStatus: status => { if (mainWindow && !mainWindow.isDestroyed()) mainWindow.webContents.send('desktop-wallpaper:status-changed', status) }
+  })
+  applicationIpc.handle('desktop-wallpaper:status', () => desktopWallpaper!.getStatus())
+  applicationIpc.handle('desktop-wallpaper:enable', (_event, enabled: boolean) => desktopWallpaper!.setEnabled(enabled))
   if(PERSONAL_EDITION)startSnapshotServer(() => mainWindow,model)
 
   app.on('activate', () => {
@@ -381,3 +399,5 @@ else app.whenReady().then(async () => {
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit()
 })
+
+app.on('before-quit', () => { quitting = true; desktopWallpaper?.dispose(); desktopWallpaper = null })

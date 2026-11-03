@@ -1,5 +1,7 @@
 # 源码与媒体边界
 
+本 fork 支持从本机完整个人安装版导入可选媒体。以下表格描述干净源码；导入后可在本机恢复 P3R 场景、人物与播放器，素材仍不进入 Git。操作见 [本地 P3R 主题](personal-media.md)。
+
 Git 源码只带可以独立构建的中性示例与项目自有图标。完整个人安装包在 [Releases](https://github.com/eighteclipses/xinhai/releases) 单独提供；源码示例包和完整个人包使用不同资料身份，不能互相冒充。
 
 | 内容 | 源码中的处理 |

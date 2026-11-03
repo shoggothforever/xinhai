@@ -1,0 +1,5 @@
+html, body, #root { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+.desktop-wallpaper { position: relative; height: 100%; overflow: hidden; pointer-events: none; --title-height: 0px; --nav-height: 0px; --music-height: 0px; }
+.desktop-wallpaper .desktop-clock { position: fixed; z-index: 4; filter: drop-shadow(0 2px 12px #0008); }
+.desktop-wallpaper .background-stack { position: absolute; inset: 0; }
+.wallpaper-paused *, .wallpaper-paused *::before, .wallpaper-paused *::after { animation-play-state: paused !important; }

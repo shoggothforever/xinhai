@@ -1,4 +1,5 @@
 import type { BackgroundId, Settings } from './types'
+import { personalMedia } from './personalMedia'
 
 export type PersonalAppearancePatch = Pick<Settings,
   'background' | 'backgroundFit' | 'themeMode' | 'themeColor' |
@@ -42,7 +43,12 @@ export const PERSONAL_APPEARANCE_PRESET: Readonly<Omit<PersonalAppearancePatch, 
   characterPosition: null,
   characterOpacity: 1,
   // Each imported wallpaper may acquire its own color through the UI.
-  wallpaperThemeColors: {}
+  wallpaperThemeColors: {},
+  ...(personalMedia.available ? {
+    background: 'moon-colonnade-ai' as const, themeColor: '#d4d4d4',
+    clockStyle: 'p3r' as const, playerStyle: 'mp3' as const,
+    showCharacter: true, characterStyle: 'auto' as const
+  } : {})
 })
 
 export function personalAppearancePatch(existing?: Pick<Settings,'wallpaperThemeColors'>): PersonalAppearancePatch {

@@ -12,6 +12,8 @@ Windows / Android 横屏平板 · 个人版 **0.2.35**
 
 </div>
 
+本 fork 增加了 **Windows 桌面壁纸模式**，可以把场景与时钟显示在主屏桌面图标后方。入口为 **10 自定义 → Windows 桌面壁纸**；详见 [功能与构建说明](source/docs/desktop-wallpaper.md)。
+
 ## 下载与源码
 
 - **日常使用**：进入 [GitHub Releases](https://github.com/eighteclipses/xinhai/releases)，选择 0.2.35 的 Windows 安装程序或便携 ZIP；Android 文件以各次 Release 实际附带内容为准，本补丁未做新的实体平板验收。个人安装包保留作者自用的完整多壁纸、角色、音乐与语音内容。下载前查看该版本的说明及文件校验值。

@@ -1,0 +1,15 @@
+const {spawnSync} = require('node:child_process')
+const fs = require('node:fs')
+const path = require('node:path')
+if (process.platform !== 'win32') {
+  console.log('Desktop wallpaper host: Windows-only; skipped on this platform')
+  process.exit(0)
+}
+const root = path.resolve(__dirname, '..')
+const output = path.join(root, 'build', 'desktop-host', 'DesktopWallpaperHost.exe')
+const compiler = path.join(process.env.WINDIR || 'C:\\Windows', 'Microsoft.NET', 'Framework64', 'v4.0.30319', 'csc.exe')
+fs.mkdirSync(path.dirname(output), {recursive: true})
+const result = spawnSync(compiler, ['/nologo', '/target:exe', '/platform:anycpu', '/optimize+', `/out:${output}`, path.join(root, 'native', 'DesktopWallpaperHost.cs')], {stdio: 'inherit', windowsHide: true})
+if (result.error) throw new Error('Cannot build the desktop host. Windows .NET Framework 4.x is required.', {cause: result.error})
+if (result.status !== 0) process.exit(result.status || 1)
+console.log('Built build/desktop-host/DesktopWallpaperHost.exe')

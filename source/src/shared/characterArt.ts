@@ -1,5 +1,6 @@
 import personalArt from './personalCharacterArt.json'
 import { COMMERCIAL_EDITION } from './edition'
+import { personalAsset, personalMedia } from './personalMedia'
 
 export interface CharacterArt {
   id: string
@@ -15,7 +16,7 @@ export interface CharacterArt {
 }
 
 export const CHARACTER_ART_SOURCE = 'https://www.bilibili.com/opus/1244002758676185093'
-export const characterArt: readonly CharacterArt[] = COMMERCIAL_EDITION ? [] : personalArt
+export const characterArt: readonly CharacterArt[] = COMMERCIAL_EDITION ? [] : personalArt.map(art => ({...art, src: personalAsset(art.src)}))
 export const characterArtGroups = [...new Set(characterArt.map(art => art.characterId))].map(id => {
   const variants = characterArt.filter(art => art.characterId === id)
   return { id, name: variants[0].characterName, variants }
@@ -23,9 +24,9 @@ export const characterArtGroups = [...new Set(characterArt.map(art => art.charac
 // Keep the complete source catalog for old settings, backups and provenance.
 // The personal gallery and actual portrait layer expose only these characters.
 export const VISIBLE_CHARACTER_IDS=['avg_4217_makoto_1','avg_4218_aigis_1','avg_4219_yukari_1'] as const
-// Catalog metadata is retained for provenance/settings compatibility. No game
-// portraits are distributed in this source snapshot, so none are offered as UI.
-const SOURCE_AVAILABLE_ART_IDS = new Set<string>()
+// A clean checkout offers no missing portraits. A local media import supplies
+// the available IDs; the original three-character filter still applies.
+const SOURCE_AVAILABLE_ART_IDS = new Set<string>(personalMedia.characterArtIds)
 export function isCharacterArtVisible(art:CharacterArt|undefined):boolean {return !!art&&SOURCE_AVAILABLE_ART_IDS.has(art.id)&&VISIBLE_CHARACTER_IDS.includes(art.characterId as typeof VISIBLE_CHARACTER_IDS[number])}
 export const visibleCharacterArt=characterArt.filter(isCharacterArtVisible)
 export const visibleCharacterArtGroups=characterArtGroups.map(group=>({...group,variants:group.variants.filter(isCharacterArtVisible)})).filter(group=>group.variants.length>0)

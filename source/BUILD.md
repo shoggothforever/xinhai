@@ -6,6 +6,7 @@
 
 - Node.js 20 或更新版本，以及 npm。
 - Windows 桌面运行需要 Electron 与匹配其架构/ABI 的 `better-sqlite3`。`npm ci` 会执行安装步骤；需要编译原生依赖时还需相应的 C++ 编译工具。
+- 桌面壁纸模式还使用 Windows 自带的 .NET Framework 4.x 编译器；`npm run dev` 和 `npm run build` 自动构建原生桌面宿主。入口与验证步骤见 [桌面壁纸说明](docs/desktop-wallpaper.md)。
 - Android APK 构建另外需要 JDK 17、Gradle 8.7、Android SDK 35 与 Build Tools 35.0.0。仓库没有 Gradle wrapper、本机 SDK 路径或签名密钥。
 
 从仓库根目录进入 `source/`：

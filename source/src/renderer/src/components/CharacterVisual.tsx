@@ -2,9 +2,10 @@ import {motion} from 'framer-motion'
 import type {Settings} from '../../../shared/types'
 import {characterArtById,characterArtViewBox,isCharacterArtVisible} from '../../../shared/characterArt'
 import CharacterPortrait from './CharacterPortrait'
-const charIdle = 'optional/char-idle.png'
-const charFocus = 'optional/char-focus.png'
-const charSummon = 'optional/char-summon.png'
+import { personalAsset } from '../../../shared/personalMedia'
+const charIdle = personalAsset('optional/char-idle.png')
+const charFocus = personalAsset('optional/char-focus.png')
+const charSummon = personalAsset('optional/char-summon.png')
 const MOOD_ART:Record<string,string>={idle:charIdle,night:charIdle,rest:charIdle,write:charIdle,focus:charIdle,levelup:charSummon}
 const MOOD_FILTER:Record<string,string>={idle:'brightness(.95)',night:'brightness(.72) saturate(.9)',rest:'brightness(.85)',write:'brightness(.82) saturate(.9)',focus:'brightness(1) saturate(1.05)',levelup:'brightness(1.08) saturate(1.15) drop-shadow(0 0 28px var(--cyan-dim))'}
 export function characterAspect(settings:Pick<Settings,'characterStyle'|'characterArtId'>):number {

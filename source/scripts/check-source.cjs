@@ -8,7 +8,7 @@ const approvedBinary = new Set(['build/icon.png', 'build/icon.ico', 'src/rendere
 const files = []
 function visit(directory) {
   for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
-    if (omittedDirectories.has(entry.name)) continue
+    if (omittedDirectories.has(entry.name) || ['build/desktop-host', 'src/renderer/public/personal-media'].includes(path.relative(root, path.join(directory, entry.name)).replaceAll('\\', '/'))) continue
     const file = path.join(directory, entry.name)
     assert(!entry.isSymbolicLink(), `Unexpected symlink: ${file}`)
     if (entry.isDirectory()) visit(file)

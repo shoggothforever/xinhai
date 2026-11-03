@@ -1,4 +1,6 @@
 node_modules/
+build/desktop-host/
+src/renderer/public/personal-media/
 out/
 dist/
 design-review/
