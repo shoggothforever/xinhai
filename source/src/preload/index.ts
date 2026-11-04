@@ -5,6 +5,21 @@ import type { ClientStateSyncRequest, ClientStateSyncResult } from '../shared/cl
 
 import type { ReviewCard, ReviewDraft, ReviewRating } from '../shared/types'
 const api = {
+  coverWall: {
+    state: ():Promise<import('../shared/coverWall').CoverState> => ipcRenderer.invoke('cover-wall:state'),
+    save: (id:string|null, content:import('../shared/coverWall').CoverContent):Promise<import('../shared/coverWall').CoverState> => ipcRenderer.invoke('cover-wall:save',id,content),
+    remove: (id:string):Promise<import('../shared/coverWall').CoverState> => ipcRenderer.invoke('cover-wall:remove',id),
+    configure: (config:import('../shared/coverWall').CoverConfig):Promise<import('../shared/coverWall').CoverState> => ipcRenderer.invoke('cover-wall:configure',config),
+    setEnabled: (enabled:boolean):Promise<import('../shared/coverWall').CoverState> => ipcRenderer.invoke('cover-wall:enable',enabled),
+    fullscreen: ():Promise<void> => ipcRenderer.invoke('cover-wall:fullscreen'),
+    open: (id:string):Promise<void> => ipcRenderer.invoke('cover-wall:open',id),
+    pickTarget: ():Promise<string|null> => ipcRenderer.invoke('cover-wall:pick-target'),
+    pickCover: ():Promise<string|null> => ipcRenderer.invoke('cover-wall:pick-cover'),
+    importJson: ():Promise<{count:number;state:import('../shared/coverWall').CoverState}|null> => ipcRenderer.invoke('cover-wall:import'),
+    exportJson: ():Promise<string|null> => ipcRenderer.invoke('cover-wall:export'),
+    onChanged: (callback:()=>void) => {const listener=()=>callback();ipcRenderer.on('cover-wall:changed',listener);return()=>{ipcRenderer.removeListener('cover-wall:changed',listener)}},
+    onEdit: (callback:(id:string|null)=>void) => {const listener=(_event:Electron.IpcRendererEvent,id:string|null)=>callback(id);ipcRenderer.on('cover-wall:edit',listener);return()=>{ipcRenderer.removeListener('cover-wall:edit',listener)}}
+  },
   desktopWallpaperStatus: ():Promise<import('../shared/desktopWallpaper').DesktopWallpaperStatus> => ipcRenderer.invoke('desktop-wallpaper:status'),
   desktopWallpaperSetEnabled: (enabled:boolean):Promise<import('../shared/desktopWallpaper').DesktopWallpaperStatus> => ipcRenderer.invoke('desktop-wallpaper:enable',enabled),
   onDesktopWallpaperStatus: (callback:(status:import('../shared/desktopWallpaper').DesktopWallpaperStatus)=>void) => {
@@ -148,7 +163,8 @@ const api = {
 
 contextBridge.exposeInMainWorld('api', api)
 
-export type XinhaiApi = Omit<typeof api, 'clientStateSync'|'desktopWallpaperStatus'|'desktopWallpaperSetEnabled'|'onDesktopWallpaperStatus'> & {
+export type XinhaiApi = Omit<typeof api, 'clientStateSync'|'desktopWallpaperStatus'|'desktopWallpaperSetEnabled'|'onDesktopWallpaperStatus'|'coverWall'> & {
+  coverWall?: typeof api.coverWall
   desktopWallpaperStatus?: typeof api.desktopWallpaperStatus
   desktopWallpaperSetEnabled?: typeof api.desktopWallpaperSetEnabled
   onDesktopWallpaperStatus?: typeof api.onDesktopWallpaperStatus

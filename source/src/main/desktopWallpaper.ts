@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, Menu, powerMonitor, screen, Tray, type IpcMainInvokeEvent } from 'electron'
+import { app, BrowserWindow, ipcMain, Menu, powerMonitor, screen, Tray, type IpcMainInvokeEvent, type MenuItemConstructorOptions } from 'electron'
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process'
 import { existsSync } from 'node:fs'
 import { join } from 'node:path'
@@ -14,6 +14,7 @@ interface Options {
   icon: string
   devUrl?: string
   onStatus?: (status: DesktopWallpaperStatus) => void
+  extraTrayItems?: () => MenuItemConstructorOptions[]
 }
 
 /** Owns a display-only window and its native desktop host. The learning window
@@ -73,12 +74,17 @@ export class DesktopWallpaper {
     else this.pauseReasons.delete(reason)
     if (before !== this.pauseReasons.size) { this.update({}); this.syncSettings() }
   }
-  private refreshTray(): void {
+  ensureTray(): void {
+    if (!this.tray) {this.tray = new Tray(this.options.icon); this.tray.on('double-click', this.options.showMain)}
+    this.refreshTray()
+  }
+  refreshTray(): void {
     if (!this.tray || this.tray.isDestroyed()) return
-    this.tray.setToolTip('心海共学 · ' + (this.status.enabled ? '桌面壁纸运行中' : '桌面壁纸已停止'))
+    this.tray.setToolTip('心海共学 · 桌面壁纸与收藏墙')
     this.tray.setContextMenu(Menu.buildFromTemplate([
       { label: '打开学习窗口', click: this.options.showMain },
       { label: this.status.enabled ? '停止桌面壁纸' : '启用桌面壁纸', click: () => { void this.setEnabled(!this.status.enabled).catch(() => this.options.showMain()) } },
+      ...(this.options.extraTrayItems?.() || []),
       { type: 'separator' },
       { label: '退出心海共学', click: () => app.quit() }
     ]))
@@ -92,10 +98,7 @@ export class DesktopWallpaper {
     if (this.status.enabled) return this.getStatus()
     this.busy = true
     try {
-      if (!this.tray) {
-        this.tray = new Tray(this.options.icon)
-        this.tray.on('double-click', this.options.showMain)
-      }
+      this.ensureTray()
       this.restarts = 0
       this.update({ enabled: true, phase: 'starting', error: null })
       await this.startWindow()

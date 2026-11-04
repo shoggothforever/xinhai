@@ -22,6 +22,7 @@ import PersonalAppearancePresets from '../components/PersonalAppearancePresets'
 import { PERSONAL_APPEARANCE_PRESET } from '../../../shared/personalAppearance'
 import CustomizationIndex from '../components/CustomizationIndex'
 import DesktopWallpaperControls from '../components/DesktopWallpaperControls'
+import CoverWallManager from '../components/CoverWallManager'
 import { personalAsset, personalMedia } from '../../../shared/personalMedia'
 export default function Customize(){
  const previewReveal=useRef<HTMLDivElement>(null)
@@ -41,6 +42,7 @@ export default function Customize(){
  return <div className="customize-page">
   <header className="customize-heading" id="customize-presets" tabIndex={-1}><div><div className="page-title"><span className="en">YOUR BLUE</span><span className="zh">自定义</span></div><p>把喜欢的场景、时间与音乐，留在同一张桌面。</p></div><PersonalAppearancePresets/></header>
   <DesktopWallpaperControls/>
+  <CoverWallManager/>
   <CustomizationIndex/>
   <OriginalThemeCards/>
   <CharacterGallery/>

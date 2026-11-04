@@ -13,6 +13,8 @@
     "build:desktop-host": "node scripts/build-desktop-host.cjs",
     "import:personal-media": "node scripts/import-personal-media.cjs",
     "test:desktop-wallpaper": "npm run build && node scripts/check-desktop-wallpaper-native.cjs && node scripts/check-desktop-wallpaper-app.cjs",
+    "test:coverwall": "npm run build && node scripts/check-coverwall.cjs",
+    "dist:coverwall": "npm run build && electron-builder --win --x64 --dir --config electron-builder.yml --config.directories.output=dist/desktop-coverwall-v4-x64",
     "build:personal": "electron-vite build",
     "build:public": "electron-vite build",
     "build:mobile": "vite build --config vite.mobile.config.ts",

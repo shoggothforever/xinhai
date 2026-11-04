@@ -1,6 +1,7 @@
 import {createLanSyncServer} from './lanSyncServer'
 import { createFocusReminder } from './focusReminder'
 import { DesktopWallpaper } from './desktopWallpaper'
+import { CoverWall } from './coverWall'
 import {neteaseLogin,neteaseLogout,neteaseRequest,neteaseResolve,neteaseShareResolve} from './netease'
 import {cloudId} from '../shared/netease'
 import { PERSONAL_EDITION, COMMERCIAL_EDITION, ONLINE_MUSIC_ENABLED } from '../shared/edition'
@@ -75,6 +76,7 @@ import type { DimensionId, GrowthSource, Settings } from '../shared/types'
 
 let mainWindow: BrowserWindow | null = null
 let desktopWallpaper: DesktopWallpaper | null = null
+let coverWall: CoverWall | null = null
 let quitting = false
 const rendererFile = join(__dirname, '../renderer/index.html')
 const rendererDevUrl = !app.isPackaged ? process.env.ELECTRON_RENDERER_URL : undefined
@@ -87,7 +89,7 @@ const applicationIpc:typeof baseIpc={...baseIpc,handle(channel,listener){baseIpc
   if(erasureScheduled)throw Error('已确认清理，正在关闭应用；清理将在重新启动时完成')
   if(backup?.isRestoring&&!channel.startsWith('backup:'))throw Error('正在恢复资料，请等待完成后再操作')
   const result=listener(event,...args)
-  const appearanceChanged=()=>{if(/^(settings:update|background:|theme:|backup:restore)/.test(channel))desktopWallpaper?.syncSettings()}
+  const appearanceChanged=()=>{if(/^(settings:update|background:|theme:|backup:restore)/.test(channel)){desktopWallpaper?.syncSettings();coverWall?.sync()}}
   if(result&&typeof result.then==='function'){activeOperations++;return Promise.resolve(result).then(value=>{appearanceChanged();return value}).finally(()=>{activeOperations--})}
   appearanceChanged()
   return result
@@ -131,7 +133,7 @@ function createWindow(): void {
 
   mainWindow.on('ready-to-show', () => { if (!(profileRoot && app.commandLine.hasSwitch('xinhai-start-hidden'))) mainWindow?.show() })
   mainWindow.on('close', event => {
-    if (!quitting && desktopWallpaper?.isEnabled()) { event.preventDefault(); mainWindow?.hide() }
+    if (!quitting && (desktopWallpaper?.isEnabled() || coverWall?.isEnabled())) { event.preventDefault(); mainWindow?.hide() }
   })
   mainWindow.on('closed', () => { mainWindow = null })
 
@@ -385,10 +387,13 @@ else app.whenReady().then(async () => {
     showMain: () => { if (!mainWindow || mainWindow.isDestroyed()) createWindow(); if (mainWindow?.isMinimized()) mainWindow.restore(); mainWindow?.show(); mainWindow?.focus() },
     icon: join(__dirname, '../renderer/design/app-icon.png'),
     devUrl: rendererDevUrl,
+    extraTrayItems: () => coverWall?.trayItems() || [],
     onStatus: status => { if (mainWindow && !mainWindow.isDestroyed()) mainWindow.webContents.send('desktop-wallpaper:status-changed', status) }
   })
   applicationIpc.handle('desktop-wallpaper:status', () => desktopWallpaper!.getStatus())
   applicationIpc.handle('desktop-wallpaper:enable', (_event, enabled: boolean) => desktopWallpaper!.setEnabled(enabled))
+  coverWall = new CoverWall(applicationIpc, () => {if (!mainWindow || mainWindow.isDestroyed()) createWindow(); if (mainWindow!.isMinimized()) mainWindow!.restore(); return mainWindow!},
+    () => Boolean(getState().settings.reduceMotion), () => {if (coverWall?.isEnabled()) desktopWallpaper?.ensureTray(); else desktopWallpaper?.refreshTray()}, rendererDevUrl)
   if(PERSONAL_EDITION)startSnapshotServer(() => mainWindow,model)
 
   app.on('activate', () => {
@@ -400,4 +405,4 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit()
 })
 
-app.on('before-quit', () => { quitting = true; desktopWallpaper?.dispose(); desktopWallpaper = null })
+app.on('before-quit', () => { quitting = true; coverWall?.dispose(); coverWall = null; desktopWallpaper?.dispose(); desktopWallpaper = null })

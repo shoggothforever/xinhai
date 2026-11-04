@@ -6,6 +6,7 @@ import { COMMERCIAL_EDITION } from '../../../shared/edition'
 import '../styles/customization-index.css'
 
 const entries: { group: string; title: string; detail: string; keywords: string; page: PageId; target: string }[] = [
+  { group: '小组件与动态', title: '桌面收藏墙', detail: '封面入口、网格/照片墙、屏幕与分区规则', keywords: 'Steam bilibili RSS 书籍 封面 URL tag 照片墙 导入 收藏 全屏', page: 'customize', target: 'customize-cover-wall' },
   { group: '画面', title: 'Windows 桌面壁纸', detail: '启用或停止桌面嵌入，保留桌面图标', keywords: '启用桌面壁纸 开启桌面壁纸 启用 开启 停止 动态 壁纸 系统桌面 嵌入 托盘', page: 'customize', target: 'customize-desktop-wallpaper' },
   { group: '画面', title: '一键外观组合', detail: '顶部的推荐外观与主题搭配', keywords: '默认 初始 预设 还原 重置 恢复', page: 'customize', target: 'customize-presets' },
   { group: '画面', title: '壁纸与背景', detail: '场景收藏、上传背景、显示方式', keywords: '图片 视频 自定义 导入 本地 铺满 完整', page: 'customize', target: 'customize-scenes' },
@@ -25,7 +26,7 @@ const entries: { group: string; title: string; detail: string; keywords: string;
 export default function CustomizationIndex() {
   const [query, setQuery] = useState('')
   const words = query.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean)
-  const matches = entries.filter(entry => (entry.target !== 'customize-desktop-wallpaper' || Boolean(window.api.desktopWallpaperStatus)) && (entry.target !== 'customize-characters' || !COMMERCIAL_EDITION && visibleCharacterArtGroups.length > 0) && words.every(word => `${entry.title} ${entry.detail} ${entry.keywords}`.toLocaleLowerCase().includes(word)))
+  const matches = entries.filter(entry => (entry.target !== 'customize-cover-wall' || Boolean(window.api.coverWall)) && (entry.target !== 'customize-desktop-wallpaper' || Boolean(window.api.desktopWallpaperStatus)) && (entry.target !== 'customize-characters' || !COMMERCIAL_EDITION && visibleCharacterArtGroups.length > 0) && words.every(word => `${entry.title} ${entry.detail} ${entry.keywords}`.toLocaleLowerCase().includes(word)))
   return <nav className="customization-index" aria-label="自定义快速定位">
     <div className="customization-index-heading"><div><h2>想调整什么？</h2><p>点入口定位到控件。搜索只筛选入口，下方设置与未保存的调整都保留。</p></div>
       <form role="search" onSubmit={event => { event.preventDefault(); const first = matches[0]; if (first) goToSetting(first.page, first.target) }}>

@@ -1,5 +1,6 @@
 import LanSyncUpdates from './components/LanSyncUpdates'
 import StartupAnnouncement from './components/StartupAnnouncement'
+import { goToSetting } from './lib/settingNavigation'
 import FocusReminder from './components/FocusReminder'
 import { COMMERCIAL_EDITION, PERSONAL_EDITION } from '../../shared/edition'
 import ThemeStudio from './pages/ThemeStudio'
@@ -60,6 +61,7 @@ const PAGES = {
 } as const
 
 export default function App() {
+  useEffect(() => window.api.coverWall?.onEdit(id => {sessionStorage.setItem('cover-wall-edit', id || ''); goToSetting('customize','customize-cover-wall'); window.dispatchEvent(new Event('cover-wall-edit'))}), [])
   const [uiHidden, setUiHidden] = useState(false)
   const [gestureHint,setGestureHint]=useState(false)
   const [focusVisited, setFocusVisited] = useState(false)

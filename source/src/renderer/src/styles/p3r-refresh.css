@@ -128,7 +128,7 @@ input[type=range]{min-height:24px;accent-color:var(--theme-light);box-shadow:non
 .interface-layer{height:100%}
 .ui-hidden .interface-layer{visibility:hidden;pointer-events:none}
 .wallpaper-view::after{display:none}
-.window-controls .hide-ui,.window-controls .desktop-wallpaper-open{width:auto;padding:0 18px;font-size:13px;border-right:1px solid color-mix(in srgb,var(--theme-light) 14.51%,transparent)}
+.window-controls .hide-ui,.window-controls .desktop-wallpaper-open,.window-controls .cover-wall-open{width:auto;padding:0 18px;font-size:13px;border-right:1px solid color-mix(in srgb,var(--theme-light) 14.51%,transparent)}
 .restore-ui{position:fixed;right:24px;top:20px;z-index:100;background:color-mix(in srgb,var(--theme-panel) 60%,transparent);color:var(--theme-pale);border:1px solid color-mix(in srgb,var(--theme-light) 26.667%,transparent);border-radius:3px;padding:11px 15px;cursor:pointer;opacity:.28;transition:opacity .2s;backdrop-filter:blur(8px);font-size:14px;min-height:44px}
 .restore-ui:hover,.restore-ui:focus-visible{opacity:1}
 .restore-ui kbd{font:11px var(--font-en);margin-left:12px;opacity:.7}

@@ -1,5 +1,21 @@
 @echo off
 cd /d "%~dp0source"
+if exist "dist\desktop-coverwall-v4-x64\win-unpacked\xinhai-source.exe" (
+  start "" "dist\desktop-coverwall-v4-x64\win-unpacked\xinhai-source.exe"
+  exit /b 0
+)
+if exist "dist\desktop-coverwall-v3-x64\win-unpacked\xinhai-source.exe" (
+  start "" "dist\desktop-coverwall-v3-x64\win-unpacked\xinhai-source.exe"
+  exit /b 0
+)
+if exist "dist\desktop-coverwall-v2-x64\win-unpacked\xinhai-source.exe" (
+  start "" "dist\desktop-coverwall-v2-x64\win-unpacked\xinhai-source.exe"
+  exit /b 0
+)
+if exist "dist\desktop-coverwall-x64\win-unpacked\xinhai-source.exe" (
+  start "" "dist\desktop-coverwall-x64\win-unpacked\xinhai-source.exe"
+  exit /b 0
+)
 if exist "dist\desktop-personal-current\win-unpacked\xinhai-source.exe" (
   start "" "dist\desktop-personal-current\win-unpacked\xinhai-source.exe"
   exit /b 0
