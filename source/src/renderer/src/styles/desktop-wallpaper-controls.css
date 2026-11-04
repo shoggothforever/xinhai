@@ -1,0 +1,11 @@
+.desktop-wallpaper-controls { padding: 24px; margin-bottom: 24px; scroll-margin-top: 16px; }
+.desktop-wallpaper-controls > header { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+.desktop-wallpaper-controls .en-label { font: 11px var(--font-en); letter-spacing: .2em; color: var(--theme-light); }
+.desktop-wallpaper-controls h2 { margin: 6px 0 8px; font-size: 22px; font-weight: 500; }
+.desktop-wallpaper-controls p { color: var(--theme-light); font-size: 12px; line-height: 1.8; margin: 0; }
+.desktop-wallpaper-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.desktop-wallpaper-actions .btn { min-height: 44px; white-space: nowrap; }
+.desktop-wallpaper-actions [role=status] { font-size: 11px; letter-spacing: .04em; color: var(--theme-light); }
+.desktop-wallpaper-controls .desktop-wallpaper-help { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--theme-line); }
+.desktop-wallpaper-controls [role=alert] { margin-top: 12px; color: var(--pink); }
+@media (max-width: 1100px) { .desktop-wallpaper-controls { padding: 18px; } }

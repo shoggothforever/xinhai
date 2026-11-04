@@ -1,5 +1,9 @@
 # 心海共学 · 0.2.35 源码快照
 
+本 fork 新增 **Windows 桌面壁纸模式**：在 **10 自定义 → Windows 桌面壁纸** 启用，将背景、人物和时钟显示在主屏桌面图标后方。支持托盘恢复/退出、外观同步和动态画面暂停。操作、构建和验证范围见 [桌面壁纸说明](docs/desktop-wallpaper.md)。
+
+若要保留完整个人版的 P3R 主题，可从本机安装版运行 `npm run import:personal-media`，再运行 `npm run dist:personal`；素材保持在 Git 忽略目录。见 [恢复 P3R 主题](docs/personal-media.md)。
+
 这份代码整理自个人版 0.2.35，提供 Windows Electron 应用和 Android 横屏 WebView 容器。包含专注计时、待办、习惯、日历、五维成长、日记回响、Markdown 知识库、复习卡片、本地音乐、自定义外观、完整备份与局域网同步的实际实现。
 
 [完整个人安装包](https://github.com/eighteclipses/xinhai/releases) · [构建步骤](BUILD.md) · [检查记录](docs/source-validation.md) · [文件清单与 SHA-256](docs/source-manifest.json) · [问题反馈](https://github.com/eighteclipses/xinhai/issues)

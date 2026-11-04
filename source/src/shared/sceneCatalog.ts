@@ -1,4 +1,5 @@
 import { originalThemes } from './originalThemes'
+import { personalMedia } from './personalMedia'
 
 export interface SceneDefinition {
   id: string
@@ -12,8 +13,8 @@ export interface SceneDefinition {
   collection?: string
   intro?: string
 }
-// Only the source-authored SVG examples are shipped. Historical third-party
-// filenames remain in scenes.json as reference metadata and are not activated.
+// A clean source checkout ships only SVG examples. Local imports activate
+// verified media paths without distributing the files through source control.
 export const DEFAULT_SCENE_ID = 'original-deep-sea'
 export const FALLBACK_POSTER = originalThemes[0].poster
-export const sceneCatalog: SceneDefinition[] = [...originalThemes]
+export const sceneCatalog: SceneDefinition[] = [...personalMedia.scenes, ...originalThemes]

@@ -2,6 +2,8 @@ const { spawnSync } = require('node:child_process')
 const path = require('node:path')
 const root = path.resolve(__dirname, '..')
 const tests = [
+  'check-personal-media.cjs',
+  'check-desktop-wallpaper-boundaries.cjs',
   'check-llm-endpoint.cjs',
   'check-share-parser.cjs',
   'check-scene-motion.cjs',

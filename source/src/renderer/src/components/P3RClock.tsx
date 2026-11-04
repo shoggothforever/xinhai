@@ -1,4 +1,5 @@
 import {useEffect,useState,type CSSProperties} from 'react'
+import {personalAsset} from '../../../shared/personalMedia'
 
 // Mean synodic month from a known new moon. Decorative phase, not an ephemeris.
 export function moonPhase(date:Date){
@@ -15,7 +16,7 @@ export default function P3RClock({scale=1}:{scale?:number}){
  const name=['NEW','CRESCENT','QUARTER','GIBBOUS','FULL','GIBBOUS','QUARTER','CRESCENT'][Math.round(phase*8)%8]
  return <div className="p3r-clock-frame" style={{width:500*scale,height:140*scale}}><div className="p3r-clock" style={{'--clock-scale':scale} as CSSProperties} role="img" aria-label={`${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日 星期${'日一二三四五六'[now.getDay()]} ${time} ${period}，近似月相 ${name}`}>
   <span className="p3r-date">{date}</span>
-  <div className="p3r-wave-cloud" aria-hidden="true">{[1,2,3,4].map(n=><div key={n} style={{backgroundImage:'radial-gradient(ellipse, #9ce9ff55, transparent 70%)',animationDelay:`-${n*2}s`}}/>)}</div>
+  <div className="p3r-wave-cloud" aria-hidden="true">{[1,2,3,4].map(n=><div key={n} style={{backgroundImage:personalAsset(`design/p3r/wave${n}.png`,'')?`url("${personalAsset(`design/p3r/wave${n}.png`)}")`:'radial-gradient(ellipse, #9ce9ff55, transparent 70%)',animationDelay:`-${n*2}s`}}/>)}</div>
   {[8,7,6,5].map(n=><span key={n} className="p3r-date p3r-date-wave" aria-hidden="true">{date}</span>)}
   <span className="p3r-weekday">{'日一二三四五六'[now.getDay()]}</span><span className="p3r-time">{time}</span>
   <span className="p3r-phase-name">{name}</span><span className="p3r-period">{period}</span>

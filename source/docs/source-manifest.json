@@ -23,13 +23,13 @@
     },
     {
       "path": ".gitignore",
-      "bytes": 840,
-      "sha256": "24947ff9acb03e6f797dde9e28681ab7af3077263ad9007330a4639ce9afeab1"
+      "bytes": 896,
+      "sha256": "97f27853108094e62d43b815a8e020327ff70e287792dcc6d23679f9556b1fba"
     },
     {
       "path": "BUILD.md",
-      "bytes": 4060,
-      "sha256": "0cd3a7ac9bb82d8e72e4be9cdeb7a4a7afdfbd434627d6288ab972719d7f76f9"
+      "bytes": 4282,
+      "sha256": "b2691f558abb265f1aeffe8ef9c86a526b846dca0a4f59789ae4f96db61cef7c"
     },
     {
       "path": "LICENSE",
@@ -43,8 +43,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 5886,
-      "sha256": "6baa2560c9d37b51812d0fff4fedeb909a7d47249186d23ab166ec1675b44472"
+      "bytes": 6432,
+      "sha256": "faaed3fe8327ae33140dea677ae60a2c0d99db2a0ad7df6164ba53479621a746"
     },
     {
       "path": "THIRD-PARTY-NOTICES.md",
@@ -197,14 +197,29 @@
       "sha256": "bf30a5a9b00c9e2e13652280521d2e80a6162d88f933c08de91b63db0e7a5971"
     },
     {
+      "path": "docs/cover-wall.md",
+      "bytes": 4949,
+      "sha256": "7ad4179f57cb04f413ed100f0b04780205cd95509177a43ddd42d8fbbcd82b9e"
+    },
+    {
+      "path": "docs/desktop-wallpaper.md",
+      "bytes": 4327,
+      "sha256": "a6743d1a2d7557b289e91a8d6e15a75397cf1c1c9903ab8d48375ef932d0df13"
+    },
+    {
       "path": "docs/media-boundary.md",
-      "bytes": 1619,
-      "sha256": "0337002dfc4786f389755ab65ea03a36bc18f16b313b0855b4a3ddba0cd32c9e"
+      "bytes": 1858,
+      "sha256": "5ccc9680ddd757e16e7915f6a5cf65ed76dafc187db1a3b684e59c2f70208f07"
     },
     {
       "path": "docs/omitted-character-art.json",
       "bytes": 13021,
       "sha256": "b9647311f474e7d499ef658076efd8154ede0d3fd61e8bcdbe52a62837da6920"
+    },
+    {
+      "path": "docs/personal-media.md",
+      "bytes": 2252,
+      "sha256": "a3b4a084a2ab556cf7be28620bcf2a24efc186b5a96fc3207755bea1c84ee396"
     },
     {
       "path": "docs/source-allowlist.json",
@@ -223,18 +238,23 @@
     },
     {
       "path": "electron-builder.yml",
-      "bytes": 643,
-      "sha256": "6f5530b594208ce2898f5f55549dae15c7a057c1d7079485cc9c747ef65eb81b"
+      "bytes": 754,
+      "sha256": "c199c8190d2194d2c92d95de0c4f1537370c3f1ca794cd6b71e9aad86d124a26"
     },
     {
       "path": "electron.vite.config.ts",
-      "bytes": 826,
-      "sha256": "67a6a38abd080f23f273012b14cfb3449c1c09a874a6b087166f1b35f3d2bd9d"
+      "bytes": 1412,
+      "sha256": "370f6a04d4fe658f616cb0143c4e0b148e57cfc4afa3d73a15ccfd2fc9fea3a6"
     },
     {
       "path": "mobile.html",
       "bytes": 328,
       "sha256": "c71af0488507ebbbb624dccff1a1d9e4a0e043e7b6ca4862313e51871528b9ee"
+    },
+    {
+      "path": "native/DesktopWallpaperHost.cs",
+      "bytes": 17486,
+      "sha256": "d2f28121497f081faf09344440d66ab2fb9b342bb310d754fae9467e96f54c57"
     },
     {
       "path": "package-lock.json",
@@ -243,13 +263,18 @@
     },
     {
       "path": "package.json",
-      "bytes": 1910,
-      "sha256": "615d9bbb326dcf6d54b20fb9f8816fb8fce3da6f1a867fd816839b8105a1c823"
+      "bytes": 2806,
+      "sha256": "fb7d33a42b64dee0074357c48198cfb6ba423d9ad27188080e3a713a88d4fb81"
     },
     {
       "path": "resources/licenses/RhineLabUI-MIT.txt",
       "bytes": 1063,
       "sha256": "b42f104f4b3687773c76efbf990c1ab7b306a8c59035958c0b886dfbbcf2cd91"
+    },
+    {
+      "path": "scripts/build-desktop-host.cjs",
+      "bytes": 1014,
+      "sha256": "7c37a29436eaf4953a798c01795e1db514b90ce5f56bd0dab13e3a120fa43f6a"
     },
     {
       "path": "scripts/check-backup-format.cjs",
@@ -260,6 +285,26 @@
       "path": "scripts/check-client-state-ipc.cjs",
       "bytes": 4358,
       "sha256": "9702e2f34dd0c77e1f367e9308e1a9a878bebe412bb144b9e5327e5390a23a42"
+    },
+    {
+      "path": "scripts/check-coverwall.cjs",
+      "bytes": 22110,
+      "sha256": "7274c52824b467350c5bed9d0e73bd96e127b320534c7b8374a83a8befe27ad3"
+    },
+    {
+      "path": "scripts/check-desktop-wallpaper-app.cjs",
+      "bytes": 7835,
+      "sha256": "24df88e6ee75eee7d5f3cd02786b86e94d5dd45c8da1244a260f3cbc4b583e7a"
+    },
+    {
+      "path": "scripts/check-desktop-wallpaper-boundaries.cjs",
+      "bytes": 1312,
+      "sha256": "add4c0842ebf2089b86a9f78647efa282146e9cb65a6ffcda7eaa17118d9d32b"
+    },
+    {
+      "path": "scripts/check-desktop-wallpaper-native.cjs",
+      "bytes": 9773,
+      "sha256": "ba9f4ab6c6269197475c6f4f248ebc9f54760ba3742472633bf1827e4a3fea1e"
     },
     {
       "path": "scripts/check-durable-client-storage.cjs",
@@ -297,6 +342,11 @@
       "sha256": "7ba491b2a7a683e9970a28ab8f6dab704d52e47cb789eff1715204ebd06afa8b"
     },
     {
+      "path": "scripts/check-personal-media.cjs",
+      "bytes": 2282,
+      "sha256": "ff96189c49c0c402b4a8a6a884cc983cc26bcca5b76fe319981064bc855e4505"
+    },
+    {
       "path": "scripts/check-scene-motion.cjs",
       "bytes": 1995,
       "sha256": "e16da0da31fb78e3c81bbe5ff5ebed3dee4f9682354ba83e8e5683012a935e61"
@@ -313,8 +363,8 @@
     },
     {
       "path": "scripts/check-source.cjs",
-      "bytes": 4531,
-      "sha256": "b8d813a2a31a1ed8b58d999ccb18ec4ced2e86c805ef00cb97d9d012626ec804"
+      "bytes": 4681,
+      "sha256": "c2cd7a994d168d6256258701cde45a4d9460abc603c686223a7add0944dc33eb"
     },
     {
       "path": "scripts/check-theme-contrast.cjs",
@@ -332,9 +382,24 @@
       "sha256": "efc08ceb08a8ffdc8af9a7f69637d479b4e7eb5068c5d61e856bb29def0adb83"
     },
     {
+      "path": "scripts/import-personal-media.cjs",
+      "bytes": 4400,
+      "sha256": "e21daa6b542285d562e45d9b9928a35e50e417faf924fa3a6b88ec438e5324f0"
+    },
+    {
+      "path": "scripts/personal-media-config.cjs",
+      "bytes": 637,
+      "sha256": "8b6f7b151c13c3be1989129883ac33f63c80c499ea94cc788f963902b5d90f0e"
+    },
+    {
       "path": "scripts/test.cjs",
-      "bytes": 947,
-      "sha256": "4338681f4d69fac9350a31109910098b7756869644e5b56a918215a3bacccd9f"
+      "bytes": 1021,
+      "sha256": "eb4be455fcbd899719df00469326a1d33b9716d7e9db567104f94ad297a37caf"
+    },
+    {
+      "path": "scripts/update-source-manifest.cjs",
+      "bytes": 1547,
+      "sha256": "27e8e9b7118068d19b6cd1b549c39a3ee709096aa70dd2093fb6250bbfa77d04"
     },
     {
       "path": "src/main/background.ts",
@@ -357,9 +422,29 @@
       "sha256": "e72c024fec0f882212e40104fd28380eb6ccef775123a87d4e1d13241c610d41"
     },
     {
+      "path": "src/main/coverWall.ts",
+      "bytes": 5977,
+      "sha256": "ff26ad9bdcfb8e2017f1808cc8e1f01ae5186c013a2871d397403aa2c4ef3b91"
+    },
+    {
+      "path": "src/main/coverWallDesktop.ts",
+      "bytes": 13037,
+      "sha256": "39bc2fdebc02cdbb8370d46bfa39519b2fad0078488228c9c643a5cc3845170d"
+    },
+    {
+      "path": "src/main/coverWallStore.ts",
+      "bytes": 6258,
+      "sha256": "670a7c686da09511a4f073c70c6cb1fd53e097785e82ee349457c59dbef556e6"
+    },
+    {
       "path": "src/main/db.ts",
       "bytes": 44986,
       "sha256": "48c2c2afffa8f4f38a23f92b0491fec12326b1906eadebb888df6e013bbd67f3"
+    },
+    {
+      "path": "src/main/desktopWallpaper.ts",
+      "bytes": 11119,
+      "sha256": "ca3292802dbeec3de1514cebfc56b48445d5f0da52a362aa998cdb46e78dfbf9"
     },
     {
       "path": "src/main/durableClientState.ts",
@@ -378,8 +463,8 @@
     },
     {
       "path": "src/main/index.ts",
-      "bytes": 23244,
-      "sha256": "022f4a7db1a45a604b9c2cb5b5d0482508899e9c990ce88daa9f4e60a89864ba"
+      "bytes": 25202,
+      "sha256": "29264ce51f74699570425eff19cb2aae6789366a81a4819f4bc2b9176548cf9e"
     },
     {
       "path": "src/main/knowledge.ts",
@@ -517,9 +602,24 @@
       "sha256": "57851c53a778b8d22c52439f6f2ba91e928a6881c5e648fcaaa4d43660812152"
     },
     {
+      "path": "src/preload/coverwall.ts",
+      "bytes": 907,
+      "sha256": "5d74d56a3946baec86fdbca3212cc18d1697d139bb8770617be57e9b42575f57"
+    },
+    {
       "path": "src/preload/index.ts",
-      "bytes": 14526,
-      "sha256": "7911c0733b93df9d583922b1a4f71e87a6e03c75651f8626de926d5872cf57cf"
+      "bytes": 17311,
+      "sha256": "74fb25cfb6b2a97e7245e0d7e358987e8198a1cab58923fc144b9e9addc95d8e"
+    },
+    {
+      "path": "src/preload/wallpaper.ts",
+      "bytes": 721,
+      "sha256": "7cef74340134c0b6906a8ddb14c8096fd57ef3c2f5afce672576d3d879c46e62"
+    },
+    {
+      "path": "src/renderer/coverwall.html",
+      "bytes": 456,
+      "sha256": "253ea6dc6f6ba56cdb6f10684811558b2aac68cd6b1cf7f78a041ea9b6a195f4"
     },
     {
       "path": "src/renderer/index.html",
@@ -568,8 +668,8 @@
     },
     {
       "path": "src/renderer/src/App.tsx",
-      "bytes": 11043,
-      "sha256": "2ca39336c3f44b0405c74926b4eb26af4493558d3820f0b079f1f4af30759066"
+      "bytes": 11482,
+      "sha256": "defb4718882f395f6b7f41e80b7b606737eb13c50fba4cfff7662f5ab4645f86"
     },
     {
       "path": "src/renderer/src/components/AlloutFinish.tsx",
@@ -618,8 +718,8 @@
     },
     {
       "path": "src/renderer/src/components/CharacterVisual.tsx",
-      "bytes": 2597,
-      "sha256": "c7780d062db349d30d4e51a14cf63be1f0edc9e6e87e36fe061638564a941738"
+      "bytes": 2704,
+      "sha256": "0f19a3fa469668942f06b31c00831f646c6bdf6da9293b72dbc069785bf21d04"
     },
     {
       "path": "src/renderer/src/components/CommercialEmpty.tsx",
@@ -632,14 +732,24 @@
       "sha256": "3d0a36aca6de612b67c42f1ec90aac9001ac057f4a14e2c8161a9bc448f3c49a"
     },
     {
+      "path": "src/renderer/src/components/CoverWallManager.tsx",
+      "bytes": 12501,
+      "sha256": "88c88b0af21b8f158da4d25c18c33161fb3622606c5e1680ad60fb6ff4676670"
+    },
+    {
       "path": "src/renderer/src/components/CustomizationIndex.tsx",
-      "bytes": 5475,
-      "sha256": "f8975c5d1fe777bae99dff44a2d0790e79c84ac4cfbb25df41387f490565ef80"
+      "bytes": 6200,
+      "sha256": "97dd1989c978a704a4513048ae85804b8ac40f66b96721223806eceddbc181bc"
     },
     {
       "path": "src/renderer/src/components/DataReset.tsx",
       "bytes": 3746,
       "sha256": "6e90a56ed3bf677dd54af1b50753ce7028efa1e2793e58d89836ad1a56a07d9c"
+    },
+    {
+      "path": "src/renderer/src/components/DesktopWallpaperControls.tsx",
+      "bytes": 2395,
+      "sha256": "42c9507323fdc8aa1e0da299529d2f7b49add046b8cb6d4ac64b9980dfeac4d5"
     },
     {
       "path": "src/renderer/src/components/DraggableWidget.tsx",
@@ -758,8 +868,8 @@
     },
     {
       "path": "src/renderer/src/components/P3RClock.tsx",
-      "bytes": 2187,
-      "sha256": "a1e40e9b088e0c6faffb235f8ae3fe9d3bafbe3891251f0bcfa1d885f295b4ea"
+      "bytes": 2344,
+      "sha256": "d59d2d2a79cbae53f89ea4562eb160e7c7255d8eb7c85ea6889748d7de48c1f1"
     },
     {
       "path": "src/renderer/src/components/PersonaRadar.tsx",
@@ -768,13 +878,13 @@
     },
     {
       "path": "src/renderer/src/components/PersonalAppearancePresets.tsx",
-      "bytes": 1877,
-      "sha256": "6102ce797609aa6df7064dd16868ce6190cd0f8e65d61dbf669a33c3bf64834f"
+      "bytes": 2175,
+      "sha256": "ca191db9da672db3edffc256e6d5cf30c11aefd4b8ca4d739031f8d0b1af8541"
     },
     {
       "path": "src/renderer/src/components/PortablePlayer.tsx",
-      "bytes": 2484,
-      "sha256": "0af53ab36814ced75dc5f99feb8ead9533412a6a496ddfb2d9b6c7f13303b83a"
+      "bytes": 2591,
+      "sha256": "477a7e81f195358daa4f6e2dfb448107a1fd7b2d3ef2e484738c2f37be275fe5"
     },
     {
       "path": "src/renderer/src/components/PrivacyEraseSettings.tsx",
@@ -823,8 +933,8 @@
     },
     {
       "path": "src/renderer/src/components/TitleBar.tsx",
-      "bytes": 859,
-      "sha256": "0a010b4164052877f115feab2cddee655aae46d55e8151e2342d33e86a7c8eb4"
+      "bytes": 1320,
+      "sha256": "4f89695bf7452eb42630b18bb5a7dd4e195db4b996499ec3f41691e2d09ac410"
     },
     {
       "path": "src/renderer/src/components/Toggle.tsx",
@@ -840,6 +950,11 @@
       "path": "src/renderer/src/components/UpdateGuide.tsx",
       "bytes": 1262,
       "sha256": "dd44f856c01599b64ce5729e6552a135a7ad172975bc323ca57de2b736db5db3"
+    },
+    {
+      "path": "src/renderer/src/coverwall.tsx",
+      "bytes": 8310,
+      "sha256": "a455ba8f91ffe1713a4a0efa8cbb793b3877931cc75c4faae108b7243903f6c9"
     },
     {
       "path": "src/renderer/src/env.d.ts",
@@ -863,8 +978,8 @@
     },
     {
       "path": "src/renderer/src/lib/bgm.ts",
-      "bytes": 6992,
-      "sha256": "9cfd6c63faef8deebbb50d9c0feca1cb0218ff919567fa01f23fded2a6a2ccb9"
+      "bytes": 7086,
+      "sha256": "75191ca1e81f9138eae57a741c4587e33fe477230ae9c397ba88726367545e29"
     },
     {
       "path": "src/renderer/src/lib/characterViewport.ts",
@@ -948,8 +1063,8 @@
     },
     {
       "path": "src/renderer/src/lib/voice.ts",
-      "bytes": 2236,
-      "sha256": "cdc5b5c7b0f11dfb84cec5a6bf3c02d8e8e33b6335928e58595f45fe24bd553b"
+      "bytes": 2346,
+      "sha256": "4e3859a80fe0e842ef44c2992aa0275cbb4da8b0ddff0ef9579349ff1eb0c3c3"
     },
     {
       "path": "src/renderer/src/lib/wallpaperColors.ts",
@@ -973,8 +1088,8 @@
     },
     {
       "path": "src/renderer/src/pages/Customize.tsx",
-      "bytes": 14235,
-      "sha256": "9c9f79d587bdc169cb0b63ae2c76f71e58c6137b980cd569f449b0109570c283"
+      "bytes": 14590,
+      "sha256": "9012a2cd0f602445c2d175ae9296a061d49caac53192a2d7adb2f3d014fba0f6"
     },
     {
       "path": "src/renderer/src/pages/Focus.tsx",
@@ -1053,8 +1168,8 @@
     },
     {
       "path": "src/renderer/src/store/music.ts",
-      "bytes": 7738,
-      "sha256": "50ab1be30297eb3a3d9544a6f854efd4c1fa0f88eaf86458123037ba6dda6d27"
+      "bytes": 7815,
+      "sha256": "8e7e46bb81c357856389f902db8246afe94aefb0281a9072624f64f7d65f37f5"
     },
     {
       "path": "src/renderer/src/styles/backup-settings.css",
@@ -1077,6 +1192,16 @@
       "sha256": "5e294ad7a10287ea31122e7d5e4e4ae127ae766e97b24c56f0ed98227fbaa857"
     },
     {
+      "path": "src/renderer/src/styles/coverwall-manager.css",
+      "bytes": 3833,
+      "sha256": "dcec96868bb5a02d7293308949b8ab32416155f797f2fe3e392791bc503072a2"
+    },
+    {
+      "path": "src/renderer/src/styles/coverwall-view.css",
+      "bytes": 1679,
+      "sha256": "e74c7101c6a3598cb49b4b0f357f22b842787d3190917f475e8b37e54d0142fc"
+    },
+    {
       "path": "src/renderer/src/styles/customization-index.css",
       "bytes": 3119,
       "sha256": "cb3d0be8ac93d395003f1e8bb7841e39bee854d2be7d631255547f81d456d3b6"
@@ -1085,6 +1210,16 @@
       "path": "src/renderer/src/styles/customize.css",
       "bytes": 11415,
       "sha256": "e696ced7eec10e2b2407e8f250df5c409a1bfd296165d729a3e367ef4bf46206"
+    },
+    {
+      "path": "src/renderer/src/styles/desktop-wallpaper-controls.css",
+      "bytes": 1121,
+      "sha256": "265b12662dead0f5b7dbc8b3af74be545610ec9367a922b505417fa8cf2cd9d5"
+    },
+    {
+      "path": "src/renderer/src/styles/desktop-wallpaper.css",
+      "bytes": 535,
+      "sha256": "b59540bab0277619deabcf8ca3ba3de0932ec2074fdb40e0c840fd129c40ce9b"
     },
     {
       "path": "src/renderer/src/styles/focus-finish.css",
@@ -1178,8 +1313,8 @@
     },
     {
       "path": "src/renderer/src/styles/p3r-refresh.css",
-      "bytes": 19727,
-      "sha256": "51df30af4688368da899bd239eb6f10a7c76d0d24d556ff765d027fc41d19aa8"
+      "bytes": 19802,
+      "sha256": "6be2efaf50127c6dc529f63edcbce53ecac67c4bf0610edd688a12853bb9c272"
     },
     {
       "path": "src/renderer/src/styles/personal-appearance.css",
@@ -1262,6 +1397,16 @@
       "sha256": "654751a0deb73ec47e79702bb8ced5a2edd739f798783e45676f14c7940e7ad7"
     },
     {
+      "path": "src/renderer/src/wallpaper.tsx",
+      "bytes": 4057,
+      "sha256": "d77e7592f1ca5211773cee18c6c4fc1bbfacb4809d3005a0019c13fe41447b2e"
+    },
+    {
+      "path": "src/renderer/wallpaper.html",
+      "bytes": 292,
+      "sha256": "8842aaa2cef92726927fbd16c1622db9c254a2d43ffb9bac316072d505e64dd5"
+    },
+    {
       "path": "src/shared/anniversary.ts",
       "bytes": 194,
       "sha256": "3d2b95d6c5802ecdff222f74fea0d79b32a1bd5c8be3c822db6cca1de4c1872d"
@@ -1298,8 +1443,8 @@
     },
     {
       "path": "src/shared/characterArt.ts",
-      "bytes": 2282,
-      "sha256": "2c20f38d4d10e9a162ea3ee0516152d683d3ff1c73f9af42393b775192e95fca"
+      "bytes": 2418,
+      "sha256": "5f4d31de234f7dc1e78926f2fc83a5691e986237753675ebf3a3d3fb8b485c0e"
     },
     {
       "path": "src/shared/characterPlacement.ts",
@@ -1317,6 +1462,11 @@
       "sha256": "a87930e861a4e78df0eecb6d277d7d814ef37fdfe26822dbd268e6fffd310b6c"
     },
     {
+      "path": "src/shared/coverWall.ts",
+      "bytes": 7230,
+      "sha256": "c292ebf45d6bc81ef9b0391ef7d627387179148ddca158f4419c5f0edc05dbd7"
+    },
+    {
       "path": "src/shared/credits.json",
       "bytes": 10690,
       "sha256": "aa63b56004f08bb6d16289f82da45f97ec6e1a2f4a4f1c46b9fd94bd1c24d9c8"
@@ -1325,6 +1475,11 @@
       "path": "src/shared/date.ts",
       "bytes": 272,
       "sha256": "c1564889192377ca7c02e438b4e98307e072e9b3823c1a277780f6c4f3aeb1e7"
+    },
+    {
+      "path": "src/shared/desktopWallpaper.ts",
+      "bytes": 1203,
+      "sha256": "38de3394a574166f13ee42c7dee9e3d720f5b43e09efd703899be722805e12d2"
     },
     {
       "path": "src/shared/edition.ts",
@@ -1448,13 +1603,18 @@
     },
     {
       "path": "src/shared/personalAppearance.ts",
-      "bytes": 2496,
-      "sha256": "497cd1479fafef9d4d8d4af4dc4519feb7f17a8526ddce7c5b4a2bf6c81e948b"
+      "bytes": 2776,
+      "sha256": "2768270ac95b5bee8a6f7f78e6dbe9b2c6c68bfee189e8d226846767381962b0"
     },
     {
       "path": "src/shared/personalCharacterArt.json",
       "bytes": 13021,
       "sha256": "b9647311f474e7d499ef658076efd8154ede0d3fd61e8bcdbe52a62837da6920"
+    },
+    {
+      "path": "src/shared/personalMedia.ts",
+      "bytes": 898,
+      "sha256": "82fd62634435e53d18f023d7ef46dcd9c53640bcef9f3f8d40e342da8ee9f716"
     },
     {
       "path": "src/shared/personalRelease.ts",
@@ -1478,8 +1638,8 @@
     },
     {
       "path": "src/shared/sceneCatalog.ts",
-      "bytes": 628,
-      "sha256": "7a8589e0183865394732445d0ef3fb2d71c0464a11464438605d4de2cb3c69e5"
+      "bytes": 698,
+      "sha256": "7712f060d362b71ba4d5a113f116966568a1c244b1954a598a1495ea6cbb627f"
     },
     {
       "path": "src/shared/sceneMigration.ts",
@@ -1528,9 +1688,13 @@
     },
     {
       "path": "vite.mobile.config.ts",
-      "bytes": 1012,
-      "sha256": "5941d0d0aa6647ee5d43aa239f9897a8db32c545e0deb7164f8f8ed9e28c4cdf"
+      "bytes": 1205,
+      "sha256": "d89f44aea779d177ef2c9b80fe4a3ef737f50ff7ff95fc6083278b211d17d34c"
     }
   ],
-  "fileCount": 303
+  "fileCount": 335,
+  "excludedGeneratedPaths": [
+    "build/desktop-host",
+    "src/renderer/public/personal-media"
+  ]
 }

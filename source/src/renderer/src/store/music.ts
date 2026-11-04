@@ -2,6 +2,7 @@ import { cloudLibraryTracks } from '../lib/cloudLibrary'
 import { bgm } from '../lib/bgm'
 import { create } from 'zustand'
 import type { ImportedTrack } from '../../../shared/musicLibrary'
+import { personalAsset } from '../../../shared/personalMedia'
 
 export interface Track { file: string; title: string; tag: 'calm' | 'battle' | 'ambient' | 'local' | 'netease'; id?: string }
 export type PlayMode = 'seq' | 'loop' | 'random'
@@ -95,7 +96,7 @@ export const useMusic = create<MusicStore>((set, get) => {
       const revision = importedRevision
       loading = (async () => {
         const [bundled, imported] = await Promise.allSettled([
-          fetch('music/manifest.json').then(async response => {
+          fetch(personalAsset('music/manifest.json')).then(async response => {
             if (!response.ok) throw Error('manifest')
             const value: unknown = await response.json()
             if (!Array.isArray(value)) throw Error('manifest')

@@ -1,5 +1,6 @@
 import {saveMusicResume} from './musicResume'
 import { ONLINE_MUSIC_ENABLED } from '../../../shared/edition'
+import { personalAsset } from '../../../shared/personalMedia'
 // One streaming element; switching cancels pending loads and errors discard the element.
 export type PlaybackState = 'loading' | 'playing' | 'paused' | 'error'
 let current: { audio: HTMLAudioElement; file: string; loading?:boolean; wantsPlay?:boolean; controller?:AbortController; blob?:string; restoreAt?:number } | null = null
@@ -88,7 +89,7 @@ export const bgm = {
       reportTime()
     }
     checkpoint(true)
-    const src = /^(file:|https:\/\/app\.xinhai\.local\/local\/music\/)/.test(file) ? file : new URL('music/' + encodeURIComponent(file), document.baseURI).href
+    const src = /^(file:|https:\/\/app\.xinhai\.local\/local\/music\/)/.test(file) ? file : new URL(personalAsset('music/' + file, 'music/' + encodeURIComponent(file)), document.baseURI).href
     // Some Android WebViews stall while probing Ogg ranges from intercepted assets.
     // Bundled tracks are small: a bounded local buffer gives the decoder a seekable source.
     // Imported files keep streaming so large user libraries do not fill memory.

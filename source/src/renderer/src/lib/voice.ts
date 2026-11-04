@@ -3,6 +3,7 @@
 // Howl 池：按文件懒创建并缓存，替换即造即弃的 new Audio()
 import { Howl } from 'howler'
 import { COMMERCIAL_EDITION } from '../../../shared/edition'
+import { personalAsset } from '../../../shared/personalMedia'
 
 export type VoiceCat =
   | 'breath'
@@ -27,7 +28,7 @@ async function loadManifest(): Promise<ManifestItem[]> {
   if(COMMERCIAL_EDITION)return []
   if (items) return items
   try {
-    const res = await fetch('voices/manifest.json')
+    const res = await fetch(personalAsset('voices/manifest.json'))
     items = (await res.json()) as ManifestItem[]
   } catch {
     items = []
@@ -42,7 +43,7 @@ function getHowl(file: string): Howl {
   let howl = howls.get(file)
   if (!howl) {
     howl = new Howl({
-      src: ['voices/' + file.split('/').map(encodeURIComponent).join('/')],
+      src: [personalAsset('voices/' + file, 'voices/' + file.split('/').map(encodeURIComponent).join('/'))],
       preload: true
     })
     howls.set(file, howl)

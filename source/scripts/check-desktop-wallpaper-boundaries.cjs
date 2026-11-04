@@ -1,0 +1,15 @@
+const assert = require('node:assert/strict')
+const Module = require('node:module')
+const {buildSync} = require('esbuild')
+const built = buildSync({entryPoints: ['src/shared/desktopWallpaper.ts'], bundle: true, platform: 'node', format: 'cjs', write: false})
+const mod = new Module(__filename, module)
+mod._compile(built.outputFiles[0].text, __filename)
+const {wallpaperSettings, wallpaperSettingKeys} = mod.exports
+const source = {background: 'custom', customBackground: {src: 'file:///example/image.svg', name: 'demo'}, showCharacter: false, llmKey: 'synthetic-key', llmEndpoint: 'https://example.invalid', llmModel: 'test', knowledgePath: 'synthetic-vault', homeLayouts: {version: 2}, wallpaperLibrary: [{id: 'private-library'}]}
+const snapshot = wallpaperSettings(source)
+assert.equal(snapshot.background, 'custom')
+assert.deepEqual(snapshot.customBackground, source.customBackground)
+for (const key of ['llmKey', 'llmEndpoint', 'llmModel', 'knowledgePath', 'homeLayouts', 'wallpaperLibrary']) assert.equal(Object.hasOwn(snapshot, key), false, key + ' must not reach the wallpaper')
+assert.deepEqual(Object.keys(snapshot).sort(), [...wallpaperSettingKeys].sort())
+assert.notEqual(snapshot, source)
+console.log('PASS wallpaper appearance allowlist excludes model configuration, vault paths and learning data')

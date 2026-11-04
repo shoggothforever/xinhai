@@ -14,6 +14,11 @@ files:
   - resources/licenses/**
 asarUnpack:
   - '**/*.node'
+extraResources:
+  - from: build/desktop-host
+    to: desktop-host
+    filter:
+      - DesktopWallpaperHost.exe
 win:
   icon: build/icon.ico
   executableName: xinhai-source
