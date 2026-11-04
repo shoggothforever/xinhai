@@ -14,8 +14,10 @@ const api = {
     fullscreen: ():Promise<void> => ipcRenderer.invoke('cover-wall:fullscreen'),
     open: (id:string):Promise<void> => ipcRenderer.invoke('cover-wall:open',id),
     pickTarget: ():Promise<string|null> => ipcRenderer.invoke('cover-wall:pick-target'),
-    pickCover: ():Promise<string|null> => ipcRenderer.invoke('cover-wall:pick-cover'),
+    pickCover: ():Promise<{cover:string;target:string;name:string}|null> => ipcRenderer.invoke('cover-wall:pick-cover'),
     importJson: ():Promise<{count:number;state:import('../shared/coverWall').CoverState}|null> => ipcRenderer.invoke('cover-wall:import'),
+    steamLibrary: ():Promise<import('../shared/coverWall').SteamLibraryGame[]> => ipcRenderer.invoke('cover-wall:steam-library'),
+    importSteam: (appIds:number[], tags:string[]):Promise<{count:number;state:import('../shared/coverWall').CoverState}> => ipcRenderer.invoke('cover-wall:steam-import', appIds, tags),
     exportJson: ():Promise<string|null> => ipcRenderer.invoke('cover-wall:export'),
     onChanged: (callback:()=>void) => {const listener=()=>callback();ipcRenderer.on('cover-wall:changed',listener);return()=>{ipcRenderer.removeListener('cover-wall:changed',listener)}},
     onEdit: (callback:(id:string|null)=>void) => {const listener=(_event:Electron.IpcRendererEvent,id:string|null)=>callback(id);ipcRenderer.on('cover-wall:edit',listener);return()=>{ipcRenderer.removeListener('cover-wall:edit',listener)}}

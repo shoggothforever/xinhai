@@ -99,19 +99,25 @@ app.whenReady().then(async()=>{
     await assert.rejects(cover.webContents.executeJavaScript(`window.coverWallView.open(${JSON.stringify(state.entries[1].id)})`),/展示规则/)
     await assert.rejects(cover.webContents.executeJavaScript(`require('electron')`))
     const localTarget=path.join(profile,'picture #100%.png'),localEntry=state.entries[2]
-    fs.writeFileSync(localTarget,nativeImage.createFromBitmap(Buffer.alloc(100*150*4,180),{width:100,height:150}).toPNG())
+    fs.writeFileSync(localTarget,nativeImage.createFromBitmap(Buffer.alloc(100*150*4,201),{width:100,height:150}).toPNG())
+    const localUri=require('node:url').pathToFileURL(localTarget).href
+    const previousDialog=dialog.showOpenDialog
+    dialog.showOpenDialog=async()=>({canceled:false,filePaths:[localTarget]})
     await until(()=>main.webContents.executeJavaScript(`Boolean(document.querySelector('[data-cover-entry="${localEntry.id}"] .cw-open-target:not(:disabled)'))`))
     await main.webContents.executeJavaScript(`[...document.querySelector('[data-cover-entry="${localEntry.id}"]').querySelectorAll('button')].find(button=>button.textContent==='编辑').click()`)
-    await main.webContents.executeJavaScript(`(()=>{const input=document.querySelector('[aria-label="收藏链接"]');Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(input,${JSON.stringify(localTarget)});input.dispatchEvent(new Event('input',{bubbles:true}))})()`)
+    await main.webContents.executeJavaScript('document.querySelector(".cw-cover-input button").click()')
+    await until(()=>main.webContents.executeJavaScript(`document.querySelector('[aria-label="封面地址"]').value!==${JSON.stringify(localEntry.content.cover)}`))
+    assert.equal(await main.webContents.executeJavaScript('document.querySelector(\'[aria-label="收藏链接"]\').value'),localEntry.content.url)
+    await main.webContents.executeJavaScript(`(()=>{const input=document.querySelector('[aria-label="收藏链接"]');Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(input,'');input.dispatchEvent(new Event('input',{bubbles:true}))})()`)
+    await main.webContents.executeJavaScript('document.querySelector(".cw-cover-input button").click()')
+    await until(()=>main.webContents.executeJavaScript(`document.querySelector('[aria-label="收藏链接"]').value===${JSON.stringify(localUri)}`),'local cover fills its target')
     await main.webContents.executeJavaScript('document.querySelector(".cw-editor").requestSubmit()')
-    const localUri=require('node:url').pathToFileURL(localTarget).href
     await until(()=>main.webContents.executeJavaScript(`window.api.coverWall.state().then(state=>state.entries.find(row=>row.id===${JSON.stringify(localEntry.id)}).content.url===${JSON.stringify(localUri)})`))
     await until(()=>main.webContents.executeJavaScript(`Boolean(document.querySelector('[data-cover-entry="${localEntry.id}"] .cw-open-target:not(:disabled)'))`))
     await main.webContents.executeJavaScript(`document.querySelector('[data-cover-entry="${localEntry.id}"] .cw-open-target').click()`)
     await until(()=>openedFiles.length===1);assert.equal(openedFiles[0],localTarget)
     await cover.webContents.executeJavaScript(`window.coverWallView.open(${JSON.stringify(localEntry.id)})`);assert.equal(openedFiles[1],localTarget)
     await main.webContents.executeJavaScript(`window.api.coverWall.open(${JSON.stringify(state.entries[1].id)})`);assert.equal(opened.at(-1),state.entries[1].content.url,'desktop-excluded items remain openable in the manager')
-    const previousDialog=dialog.showOpenDialog;dialog.showOpenDialog=async()=>({canceled:false,filePaths:[localTarget]})
     assert.equal(await main.webContents.executeJavaScript('window.api.coverWall.pickTarget()'),localUri);dialog.showOpenDialog=previousDialog
     const missingState=await main.webContents.executeJavaScript(`window.api.coverWall.save(${JSON.stringify(localEntry.id)},${JSON.stringify({...rows[2],url:path.join(profile,'missing.png')})})`)
     await assert.rejects(main.webContents.executeJavaScript(`window.api.coverWall.open(${JSON.stringify(localEntry.id)})`),/找不到打开目标/)
@@ -184,8 +190,55 @@ app.whenReady().then(async()=>{
     await main.webContents.executeJavaScript('window.api.desktopWallpaperSetEnabled(false)')
     await main.webContents.executeJavaScript('window.api.winClose()');assert.equal(main.isDestroyed(),false);assert.equal(main.isVisible(),false)
     await main.webContents.executeJavaScript('window.api.coverWall.setEnabled(false)');assert.equal(cover.isDestroyed(),true)
+    process.env.STEAM_API_KEY='test-steam-key'
+    process.env.STEAM_ID='76561198000000000'
+    const originalFetch=global.fetch
+    global.fetch=async url=>{
+      assert.equal(url.origin,'https://api.steampowered.com')
+      assert.equal(url.pathname,'/IPlayerService/GetOwnedGames/v1/')
+      assert.equal(url.searchParams.get('key'),'test-steam-key')
+      assert.equal(url.searchParams.get('include_appinfo'),'true')
+      return Response.json({response:{games:[
+        {appid:620,name:'Portal 2',playtime_forever:0},
+        {appid:400,name:'Portal',playtime_forever:25},
+        {appid:570,name:'Dota 2'}
+      ]}})
+    }
+    await main.webContents.executeJavaScript('[...document.querySelectorAll(".cw-library-tools button")].find(button=>button.textContent==="从 Steam 导入").click()')
+    await until(()=>main.webContents.executeJavaScript('document.querySelectorAll(".cw-steam-game").length===3'),'Steam preview')
+    assert.equal((await main.webContents.executeJavaScript('window.api.coverWall.state()')).entries.length,24)
+    await main.webContents.executeJavaScript('document.querySelector(".cw-steam-toggle input").click()')
+    await until(()=>main.webContents.executeJavaScript('document.querySelectorAll(".cw-steam-game").length===1'),'Steam zero playtime filter')
+    await main.webContents.executeJavaScript('document.querySelector(".cw-steam-game input").click()')
+    await main.webContents.executeJavaScript('document.querySelector(".cw-steam .btn.primary").click()')
+    await until(()=>main.webContents.executeJavaScript('window.api.coverWall.state().then(state=>state.entries.length===25)'),'Steam import')
+    const duplicate=await main.webContents.executeJavaScript('window.api.coverWall.importSteam([620],["other-tag"])')
+    assert.equal(duplicate.count,0)
+    const game=duplicate.state.entries.at(-1)
+    assert.deepEqual(Object.keys(game.content),contentKeys)
+    assert.equal(game.content.description,'Portal 2')
+    assert.equal(game.content.source,'Steam')
+    assert.deepEqual(game.content.tags,['Steam'])
+    await assert.rejects(main.webContents.executeJavaScript('window.api.coverWall.importSteam([123],[])'),/游戏列表已变更/)
+    await main.webContents.executeJavaScript(`window.api.coverWall.open(${JSON.stringify(game.id)})`)
+    assert.equal(opened.at(-1),'steam://nav/games/details/620')
+    global.fetch=async url=>{throw Error(url.href)}
+    await assert.rejects(main.webContents.executeJavaScript('window.api.coverWall.steamLibrary()'),error=>
+      /暂时无法连接 Steam/.test(error.message) && !error.message.includes('test-steam-key'))
+    global.fetch=originalFetch
+    const quickImage=path.join(profile,'quick add.png')
+    fs.copyFileSync(localTarget,quickImage)
+    dialog.showOpenDialog=async()=>({canceled:false,filePaths:[quickImage]})
+    await main.webContents.executeJavaScript('[...document.querySelectorAll(".cw-library-tools button")].find(button=>button.textContent.includes("添加本机图片")).click()')
+    await until(()=>main.webContents.executeJavaScript('window.api.coverWall.state().then(state=>state.entries.length===26)'),'one-step local image add')
+    const quickEntry=(await main.webContents.executeJavaScript('window.api.coverWall.state()')).entries.at(-1)
+    assert.equal(quickEntry.content.url,require('node:url').pathToFileURL(quickImage).href)
+    assert.equal(quickEntry.content.description,'quick add.png')
+    await main.webContents.executeJavaScript(`window.api.coverWall.open(${JSON.stringify(quickEntry.id)})`)
+    assert.equal(openedFiles.at(-1),quickImage)
+    dialog.showOpenDialog=previousDialog
     fs.writeFileSync(path.join(output,'checks.json'),JSON.stringify({sixAttributes:true,tagRules:true,localPersistence:true,jsonRoundtrip:true,grid:true,photoNoOverlap:true,clickOpen:true,nativeDesktopParent:inspect.parentClass,nativeCoverHit:true,nativeGapPassthrough:true,wallpaperCoexistence:true,fullscreen:true,closeToTray:true},null,2))
-    console.log('PASS cover wall: six attributes, rules, SQLite, import/export, grid/photo, native shape, links, fullscreen and wallpaper coexistence')
+    console.log('PASS cover wall: six attributes, rules, SQLite, import/export, Steam selection, one-step images, grid/photo, native shape, links, fullscreen and wallpaper coexistence')
     app.quit()
   } catch(error){console.error(error);console.error(rendererErrors);for(const win of BrowserWindow.getAllWindows()){try{console.error(await win.webContents.executeJavaScript('({url:location.href,body:document.body.innerText.slice(0,180),wall:!!document.querySelector(".cw-wall"),view:typeof window.coverWallView})'))}catch{}}process.exitCode=1;app.exit(1)}
 })

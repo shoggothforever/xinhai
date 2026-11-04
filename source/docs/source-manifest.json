@@ -198,8 +198,8 @@
     },
     {
       "path": "docs/cover-wall.md",
-      "bytes": 4949,
-      "sha256": "7ad4179f57cb04f413ed100f0b04780205cd95509177a43ddd42d8fbbcd82b9e"
+      "bytes": 5614,
+      "sha256": "8d7c0526523a5ceca02d85d42a090d842a196167bd6a569977ca9e5f34add40d"
     },
     {
       "path": "docs/desktop-wallpaper.md",
@@ -288,8 +288,8 @@
     },
     {
       "path": "scripts/check-coverwall.cjs",
-      "bytes": 22110,
-      "sha256": "7274c52824b467350c5bed9d0e73bd96e127b320534c7b8374a83a8befe27ad3"
+      "bytes": 26431,
+      "sha256": "df0a42c392f421b97c1bd0a3d1922a0431591229aec64c4e4b345ecf24d1ed11"
     },
     {
       "path": "scripts/check-desktop-wallpaper-app.cjs",
@@ -423,8 +423,8 @@
     },
     {
       "path": "src/main/coverWall.ts",
-      "bytes": 5977,
-      "sha256": "ff26ad9bdcfb8e2017f1808cc8e1f01ae5186c013a2871d397403aa2c4ef3b91"
+      "bytes": 7209,
+      "sha256": "7a577907c1869462d76eecdec15e4888b55b57359cdc46e9afb51b55f46c4535"
     },
     {
       "path": "src/main/coverWallDesktop.ts",
@@ -542,6 +542,11 @@
       "sha256": "492ca5e53acd1f390aaec32d6727e1ee03355fdcf68d0d25426dee5fc1b8e8bd"
     },
     {
+      "path": "src/main/steamLibrary.ts",
+      "bytes": 2229,
+      "sha256": "a6658a44d270b8028e1199f9d08e569eea726e55726afcf63c069a3c8d6233cc"
+    },
+    {
       "path": "src/main/themeFiles.ts",
       "bytes": 23157,
       "sha256": "83616d6b03c5ce77d185bbd8a3f8519fd576853b8d462316ca85296827d0c8ba"
@@ -608,8 +613,8 @@
     },
     {
       "path": "src/preload/index.ts",
-      "bytes": 17311,
-      "sha256": "74fb25cfb6b2a97e7245e0d7e358987e8198a1cab58923fc144b9e9addc95d8e"
+      "bytes": 17660,
+      "sha256": "6951d257838d96e734fe11e701e1d9e0c72b450ad0f9e02825c64791273d41a5"
     },
     {
       "path": "src/preload/wallpaper.ts",
@@ -733,8 +738,8 @@
     },
     {
       "path": "src/renderer/src/components/CoverWallManager.tsx",
-      "bytes": 12501,
-      "sha256": "88c88b0af21b8f158da4d25c18c33161fb3622606c5e1680ad60fb6ff4676670"
+      "bytes": 16701,
+      "sha256": "9fcce06ec431dbcf091e32ff98361e81b440fa0a507ce5d41ef02c2ca1a43f0e"
     },
     {
       "path": "src/renderer/src/components/CustomizationIndex.tsx",
@@ -953,8 +958,8 @@
     },
     {
       "path": "src/renderer/src/coverwall.tsx",
-      "bytes": 8310,
-      "sha256": "a455ba8f91ffe1713a4a0efa8cbb793b3877931cc75c4faae108b7243903f6c9"
+      "bytes": 8405,
+      "sha256": "21a7173feeff9b8bdcfba5f1a2acd30d1d323075cda4702792b76639b1da1145"
     },
     {
       "path": "src/renderer/src/env.d.ts",
@@ -1193,8 +1198,8 @@
     },
     {
       "path": "src/renderer/src/styles/coverwall-manager.css",
-      "bytes": 3833,
-      "sha256": "dcec96868bb5a02d7293308949b8ab32416155f797f2fe3e392791bc503072a2"
+      "bytes": 4523,
+      "sha256": "53469668331efabcb7641804ecf24ad6c2a07f19b9bfeaab1100f0a647b5ccb9"
     },
     {
       "path": "src/renderer/src/styles/coverwall-view.css",
@@ -1463,8 +1468,8 @@
     },
     {
       "path": "src/shared/coverWall.ts",
-      "bytes": 7230,
-      "sha256": "c292ebf45d6bc81ef9b0391ef7d627387179148ddca158f4419c5f0edc05dbd7"
+      "bytes": 7354,
+      "sha256": "ed8c26d64b73364646a6511c30cb94970c043a6287c139159891fb4f9c374c46"
     },
     {
       "path": "src/shared/credits.json",
@@ -1692,7 +1697,7 @@
       "sha256": "d89f44aea779d177ef2c9b80fe4a3ef737f50ff7ff95fc6083278b211d17d34c"
     }
   ],
-  "fileCount": 335,
+  "fileCount": 336,
   "excludedGeneratedPaths": [
     "build/desktop-host",
     "src/renderer/public/personal-media"

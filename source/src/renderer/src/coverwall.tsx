@@ -19,7 +19,8 @@ function Wall({view}: {view: CoverViewSnapshot}) {
     if (view.mode !== 'grid') return
     let frame = 0, previous = performance.now()
     const animate = (now: number) => {
-      const dt = Math.min(80, now - previous); previous = now
+      // The first frame timestamp can precede the time at which this effect ran.
+      const dt = Math.max(0, Math.min(80, now - previous)); previous = now
       if (!view.paused && !hoverRef.current && now > manualUntil.current) {
         offset.current = (offset.current + dt * view.speed / 1000) % (totalRows * pitch)
       }

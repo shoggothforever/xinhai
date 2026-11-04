@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { coverAllowed, type CoverConfig, type CoverContent, type CoverEntry, type CoverState } from '../../../shared/coverWall'
+import { coverAllowed, type CoverConfig, type CoverContent, type CoverEntry, type CoverState, type SteamLibraryGame } from '../../../shared/coverWall'
 import '../styles/coverwall-manager.css'
 
 const blank = (): CoverContent => ({cover: '', time: new Date().toISOString().slice(0,10), source: '', url: '', description: '', tags: []})
@@ -10,6 +10,10 @@ export default function CoverWallManager() {
   const [only, setOnly] = useState(''), [hide, setHide] = useState(''), [message, setMessage] = useState(''), [error, setError] = useState(''), [busy, setBusy] = useState(false)
   const [draft, setDraft] = useState<CoverContent | null>(null), [editing, setEditing] = useState<string | null>(null), [draftTags, setDraftTags] = useState('')
   const [query, setQuery] = useState(''), [limit, setLimit] = useState(60)
+  const [steamGames, setSteamGames] = useState<SteamLibraryGame[] | null>(null)
+  const [steamQuery, setSteamQuery] = useState(''), [unplayedOnly, setUnplayedOnly] = useState(false)
+  const [steamSelection, setSteamSelection] = useState<number[]>([]), [steamLimit, setSteamLimit] = useState(60)
+  const [steamTags, setSteamTags] = useState('Steam')
   function edit(entry?: CoverEntry) {setEditing(entry?.id || null); setDraft(entry ? {...entry.content} : blank()); setDraftTags(entry?.content.tags.join(', ') || ''); setError('')}
   useEffect(() => {
     if (!api) return
@@ -34,6 +38,10 @@ export default function CoverWallManager() {
   }
   const filtered = state?.entries.filter(entry => `${entry.content.description} ${entry.content.source} ${entry.content.tags.join(' ')} ${entry.content.url}`.toLocaleLowerCase().includes(query.toLocaleLowerCase())) || []
   const eligible = state?.entries.filter(entry => coverAllowed(entry.content, state.config.rules)).length || 0
+  const importedUrls = new Set(state?.entries.map(entry => entry.content.url))
+  const steamMatches = steamGames?.filter(game =>
+    (!unplayedOnly || game.minutes === 0) && game.name.toLocaleLowerCase().includes(steamQuery.trim().toLocaleLowerCase())) || []
+  const selected = steamGames?.filter(game => steamSelection.includes(game.appId) && !importedUrls.has(game.url)).map(game => game.appId) || []
   return <section className="glass coverwall-manager" id="customize-cover-wall" tabIndex={-1} aria-labelledby="coverwall-title">
     <header><div><span className="en-label">YOUR COLLECTION / COVER WALL</span><h2 id="coverwall-title">桌面收藏墙</h2><p>只看见喜欢的封面。点一下，回到它原本的地方。</p></div><div className="cw-actions">
       <button className="btn primary" disabled={busy || !state || !state.status.supported} onClick={() => void run(async () => {setState(await api.setEnabled(!state!.status.enabled))})}>{state?.status.enabled ? '停止桌面收藏墙' : '启用桌面收藏墙'}</button>
@@ -50,10 +58,60 @@ export default function CoverWallManager() {
     </div><fieldset className="cw-region"><legend>桌面组件区域 · 占所选屏幕的百分比</legend>{([['x','距左'],['y','距上'],['width','宽度'],['height','高度']] as const).map(([key,label]) => <label key={key}>{label}<input aria-label={`区域${label}`} type="number" min={key === 'x' || key === 'y' ? 0 : 10} max={100} value={Math.round(config.region[key] * 100)} onChange={event => setConfig({...config, region: {...config.region, [key]: Number(event.target.value) / 100}})}/><span>%</span></label>)}</fieldset>
       <div className="cw-actions"><button className="btn" disabled={busy} onClick={() => void run(async () => {const next = await api.configure({...config, rules: {onlyTags: tags(only), hideTags: tags(hide)}}); setState(next); setConfig(next.config); setMessage('展示方式与规则已应用')})}>应用展示设置</button><small>命中任一“只显示”分区即可；“不显示”优先。未设置 tag 的内容只在“只显示”留空时出现。</small></div>
     </details>}
-    <div className="cw-library-tools"><button className="btn" disabled={busy} onClick={() => edit()}>＋ 添加内容</button><button className="btn" disabled={busy} onClick={() => void run(async () => {const result = await api.importJson(); if (result) {setState(result.state); setMessage(`已合并 ${result.count} 条内容，重复链接已跳过`)}})}>导入 JSON</button><button className="btn" disabled={busy} onClick={() => void run(async () => {const file = await api.exportJson(); if (file) setMessage('已导出收藏与本机封面')})}>导出 JSON</button><input type="search" aria-label="搜索收藏" value={query} placeholder="搜索描述、来源、tag 或链接" onChange={event => {setQuery(event.target.value); setLimit(60)}}/></div>
+    <div className="cw-library-tools">
+      <button className="btn" disabled={busy} onClick={() => edit()}>＋ 添加内容</button>
+      <button className="btn" disabled={busy || !state} onClick={() => void run(async () => {
+        const image = await api.pickCover()
+        if (!image) return
+        setState(await api.save(null, {...blank(), cover: image.cover, url: image.target, source: '本机图片', description: image.name}))
+        setMessage('图片已加入收藏，点击封面可打开原图')
+      })}>＋ 添加本机图片</button>
+      <button className="btn" disabled={busy || !state} aria-expanded={steamGames !== null} aria-controls="cw-steam-import" onClick={() => {
+        if (steamGames) {setSteamGames(null); setSteamSelection([]); return}
+        void run(async () => {setSteamGames(await api.steamLibrary()); setSteamLimit(60)})
+      }}>{steamGames ? '收起 Steam 游戏库' : '从 Steam 导入'}</button>
+      <button className="btn" disabled={busy} onClick={() => void run(async () => {const result = await api.importJson(); if (result) {setState(result.state); setMessage(`已合并 ${result.count} 条内容，重复链接已跳过`)}})}>导入 JSON</button>
+      <button className="btn" disabled={busy} onClick={() => void run(async () => {const file = await api.exportJson(); if (file) setMessage('已导出收藏与本机封面')})}>导出 JSON</button>
+      <input type="search" aria-label="搜索收藏" value={query} placeholder="搜索描述、来源、tag 或链接" onChange={event => {setQuery(event.target.value); setLimit(60)}}/>
+    </div>
+    {steamGames && <section className="cw-editor cw-steam" id="cw-steam-import" aria-label="从 Steam 导入">
+      <h3>从 Steam 游戏库挑选</h3>
+      <p>Steam 返回了 {steamGames.length} 款游戏。勾选后导入，点击收藏封面会打开 Steam 库中的游戏详情。</p>
+      <div className="cw-editor-fields">
+        <label>搜索游戏<input type="search" value={steamQuery} onChange={event => {setSteamQuery(event.target.value); setSteamLimit(60)}}/></label>
+        <label>导入到分区 tag<input value={steamTags} placeholder="Steam, 待玩…" onChange={event => setSteamTags(event.target.value)}/></label>
+      </div>
+      <label className="cw-steam-toggle"><input type="checkbox" checked={unplayedOnly} onChange={event => {setUnplayedOnly(event.target.checked); setSteamLimit(60)}}/>仅显示零游玩时长</label>
+      <div className="cw-steam-list">{steamMatches.slice(0, steamLimit).map(game => {
+        const imported = importedUrls.has(game.url)
+        return <label key={game.appId} className="cw-steam-game">
+          <input type="checkbox" checked={imported || steamSelection.includes(game.appId)} disabled={busy || imported}
+            onChange={event => {
+              const checked = event.target.checked
+              setSteamSelection(previous => checked ? [...previous, game.appId] : previous.filter(id => id !== game.appId))
+            }}/>
+          <img src={game.cover} alt="" loading="lazy" onError={event => {event.currentTarget.style.visibility = 'hidden'}}/>
+          <span>{game.name}<small>{imported ? '已收藏' : game.minutes === null ? '时长未知' : `${game.minutes} 分钟`}</small></span>
+        </label>
+      })}</div>
+      {!steamMatches.length && <p>没有符合条件的游戏。</p>}
+      <div className="cw-actions">
+        <button className="btn primary" disabled={busy || !selected.length} onClick={() => void run(async () => {
+          const result = await api.importSteam(selected, tags(steamTags))
+          setState(result.state); setSteamSelection([]); setMessage(`已导入 ${result.count} 款 Steam 游戏`)
+        })}>导入已选 · {selected.length}</button>
+        {steamMatches.length > steamLimit && <button className="btn" onClick={() => setSteamLimit(steamLimit + 60)}>显示更多游戏</button>}
+      </div>
+    </section>}
     {draft && <form className="cw-editor" onSubmit={event => {event.preventDefault(); void run(async () => {setState(await api.save(editing, {...draft, tags: tags(draftTags)})); setDraft(null); setMessage('收藏已保存')})}}>
       <h3>{editing ? '编辑收藏' : '添加收藏'}</h3><div className="cw-editor-fields">
-        <label className="cw-cover-input">封面<input aria-label="封面地址" value={draft.cover} placeholder="https://… 或选择本机图片" onChange={event => setDraft({...draft, cover: event.target.value})}/><button type="button" className="btn" disabled={busy} onClick={() => void run(async () => {const cover = await api.pickCover(); if (cover) setDraft({...draft, cover})})}>选择本机封面</button></label>
+        <label className="cw-cover-input">封面<input aria-label="封面地址" value={draft.cover} placeholder="https://… 或选择本机图片" onChange={event => setDraft({...draft, cover: event.target.value})}/>
+          <button type="button" className="btn" disabled={busy} onClick={() => void run(async () => {
+            const image = await api.pickCover()
+            if (image) setDraft(previous => previous && {...previous, cover: image.cover, url: previous.url.trim() ? previous.url : image.target})
+          })}>选择本机封面</button>
+          <small>打开地址留空时，选择本机图片会自动填入原图地址。</small>
+        </label>
         <label>时间<input value={draft.time || ''} placeholder="例如 2026-11-03，可留空" maxLength={80} onChange={event => setDraft({...draft, time: event.target.value || null})}/></label>
         <label>来源<input value={draft.source} placeholder="Steam / bilibili / RSS / 书籍…" maxLength={120} onChange={event => setDraft({...draft, source: event.target.value})}/></label>
         <label className="cw-wide cw-target-input">URL / 打开目标<input aria-label="收藏链接" value={draft.url} placeholder="网页、Steam 链接，或本机图片/书籍路径" maxLength={8192} onChange={event => setDraft({...draft, url: event.target.value})}/><button type="button" className="btn" disabled={busy} onClick={() => void run(async () => {const target = await api.pickTarget(); if (target) setDraft({...draft, url: target})})}>选择本机文件</button></label>
@@ -61,9 +119,9 @@ export default function CoverWallManager() {
         <label className="cw-wide">分区 tag<input value={draftTags} placeholder="游戏, 待玩, 安静…" onChange={event => setDraftTags(event.target.value)}/></label>
       </div><div className="cw-actions"><button type="submit" className="btn primary" disabled={busy}>保存收藏</button><button type="button" className="btn" disabled={busy} onClick={() => setDraft(null)}>取消</button><small>六项属性中只有封面会出现在桌面。保存后可点下方“打开”，也可点击桌面或全屏中的封面。链接留空时会回到编辑。</small></div>{error && <p role="alert" className="cw-message">{error}</p>}
     </form>}
+    {message && <p role="status" className="cw-message">{message}</p>}{((!draft && error) || state?.status.error) && <p role="alert" className="cw-message">{!draft && error || state?.status.error}</p>}
     {state && !state.entries.length && <div className="cw-library-empty"><strong>把已经挑选过的内容，放回视线里。</strong><p>添加第一张封面与链接，或导入收藏 JSON。这里不会自动拉取推荐流。</p></div>}
     <div className="cw-library">{filtered.slice(0,limit).map(entry => <article key={entry.id} data-cover-entry={entry.id} className={!coverAllowed(entry.content, state!.config.rules) ? 'cw-excluded' : ''}><button className="cw-library-cover" onClick={() => edit(entry)} aria-label={`编辑 ${entry.content.description || entry.content.source || '收藏'}`}><img src={entry.content.cover} alt="" loading="lazy"/></button><div><strong>{entry.content.description || '未填写描述'}</strong><small>{entry.content.source || '未填写来源'}{entry.content.time ? ` · ${entry.content.time}` : ''}</small><small>{entry.content.tags.join(' / ') || '未分区'}{!coverAllowed(entry.content, state!.config.rules) ? ' · 已被规则隐藏' : ''}</small><div className="cw-actions"><button className="btn cw-open-target" disabled={busy || !entry.content.url} title={entry.content.url ? '打开原内容' : '请先编辑并填写打开目标'} onClick={() => void run(() => api.open(entry.id))}>打开</button><button className="btn" disabled={busy} onClick={() => edit(entry)}>编辑</button><button className="btn" disabled={busy} onClick={() => {if (window.confirm('从收藏墙移除这条内容？原网页、游戏或书籍不会删除。')) void run(async () => {setState(await api.remove(entry.id)); if (editing === entry.id) setDraft(null)})}}>移除</button></div></div></article>)}</div>
     {filtered.length > limit && <button className="btn" onClick={() => setLimit(limit + 60)}>继续显示 · 还有 {filtered.length - limit} 条</button>}
-    {message && <p role="status" className="cw-message">{message}</p>}{((!draft && error) || state?.status.error) && <p role="alert" className="cw-message">{!draft && error || state?.status.error}</p>}
   </section>
 }

@@ -7,6 +7,13 @@ export interface CoverContent {
   tags: string[]
 }
 export interface CoverEntry { id: string; content: CoverContent; aspect: number }
+export interface SteamLibraryGame {
+  appId: number
+  name: string
+  minutes: number | null
+  cover: string
+  url: string
+}
 export interface CoverRules { onlyTags: string[]; hideTags: string[] }
 export interface CoverConfig {
   mode: 'grid' | 'photo'
